@@ -1,0 +1,19 @@
+{
+  "name": "vincare-copilot",
+  "version": "1.0.0",
+  "description": "VinCare Copilot - Pre-visit AI Triage & Preparation Assistant Prototype for Vinmec Healthcare",
+  "scripts": {
+    "start": "npx -y serve . -l 3000",
+    "dev": "npx -y serve . -l 3000"
+  },
+  "keywords": [
+    "vinmec",
+    "ai-triage",
+    "pre-visit",
+    "healthcare",
+    "biodesign",
+    "prototype"
+  ],
+  "author": "VinUni Exploration Sprint Team",
+  "license": "MIT"
+}

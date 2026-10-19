@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VinCare Copilot - Báo cáo Trải nghiệm Tiền khám Vinmec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       RESET & BASE STYLES
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #028489;
+      --primary-dark: #005F63;
+      --primary-light: #E6F6F6;
+      --navy: #002D62;
+      --navy-dark: #001A38;
+      --navy-deep: #000F24;
+      --sky: #0284C7;
+      --sky-light: #38BDF8;
+      --red: #DC2626;
+      --red-light: #FEF2F2;
+      --emerald: #059669;
+      --emerald-light: #ECFDF5;
+      --slate-900: #0F172A;
+      --slate-800: #1E293B;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748B;
+      --slate-200: #E2E8F0;
+      --slate-100: #F1F5F9;
+      --slate-50: #F8FAFC;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 50% 25%, #0B1E3D 0%, #020817 100%);
+      color: var(--slate-900);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Progress Bar */
+    .top-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--sky-light), var(--primary), #10B981);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 2000;
+    }
+
+    /* Viewport Container */
+    .presentation-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 50px; /* Leaves breathing room for navbar */
+      position: relative;
+    }
+
+    /* 1600x900 Stage Scaled by JS */
+    .stage-wrapper {
+      position: relative;
+      flex-shrink: 0;
+      width: 1600px;
+      height: 900px;
+      transform-origin: center center;
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--slate-50);
+    }
+
+    /* Base Slide Layout */
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1600px;
+      height: 900px;
+      background: var(--slate-50);
+      padding: 34px 55px 22px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+      animation: fadeInSlide 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: scale(0.992); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ============================================================
+       SLIDE 0: LUXURY COVER SLIDE
+       ============================================================ */
+    .slide-cover {
+      background: radial-gradient(circle at 82% 18%, #0A3D78 0%, #001A38 55%, #000E20 100%);
+      color: #FFFFFF;
+      padding: 44px 75px 36px;
+      position: relative;
+    }
+    .slide-cover::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(2, 132, 137, 0.28) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 18px;
+      background: rgba(2, 132, 137, 0.25);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 30px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--sky-light);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .cover-date {
+      font-size: 1.15rem;
+      color: #94A3B8;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .cover-main {
+      margin: 10px 0;
+    }
+    .cover-title {
+      font-size: 4rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+      background: linear-gradient(135deg, #FFFFFF 45%, var(--sky-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    .cover-subtitle {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--sky-light);
+      line-height: 1.35;
+      margin-bottom: 14px;
+    }
+    .cover-desc {
+      font-size: 1.25rem;
+      color: #CBD5E1;
+      line-height: 1.5;
+      max-width: 86%;
+    }
+    .cover-pills {
+      display: flex;
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .cover-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      padding-top: 16px;
+    }
+    .cover-author {
+      font-size: 1.2rem;
+      color: #E2E8F0;
+    }
+    .cover-author strong {
+      color: #FFFFFF;
+      font-size: 1.45rem;
+    }
+    .cover-meta {
+      text-align: right;
+      font-size: 1.05rem;
+      color: #94A3B8;
+      line-height: 1.45;
+    }
+
+    /* ============================================================
+       CONTENT SLIDES (1 - 5)
+       ============================================================ */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2px solid var(--slate-200);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .tagline {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      display: block;
+    }
+    .slide-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      line-height: 1.15;
+    }
+    .slide-num {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--slate-500);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+    }
+
+    /* Cards */
+    .card {
+      background: #FFFFFF;
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card.alert {
+      border-left: 5px solid var(--red);
+      background: #FFFDFD;
+    }
+    .card.primary {
+      border-left: 5px solid var(--primary);
+      background: #F9FEFE;
+    }
+    .card.navy {
+      border-left: 5px solid var(--navy);
+      background: #F8FAFD;
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title.red { color: var(--red); }
+    .card-title.teal { color: var(--primary); }
+
+    .card-subtitle {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .flag-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: var(--navy);
+      color: #FFFFFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card-list li {
+      font-size: 1.05rem;
+      line-height: 1.45;
+      color: var(--slate-700);
+      position: relative;
+      padding-left: 20px;
+    }
+    .card-list li::before {
+      content: "•";
+      color: var(--primary);
+      font-size: 1.6rem;
+      position: absolute;
+      left: 2px;
+      top: -6px;
+    }
+    .card-list.red li::before {
+      color: var(--red);
+    }
+
+    /* Bottom Hero Banner (Khung đúc kết ở đáy mỗi slide) */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      color: #FFFFFF;
+      border-radius: 10px;
+      padding: 13px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 14px rgba(0, 26, 56, 0.25);
+    }
+    .hero-banner.teal {
+      background: linear-gradient(135deg, #0F766E, #005F63);
+    }
+    .hero-banner.navy-blue {
+      background: linear-gradient(135deg, var(--navy), #0B3A70);
+    }
+
+    .hero-text {
+      font-size: 1.15rem;
+      line-height: 1.45;
+      font-weight: 500;
+      max-width: 78%;
+    }
+    .hero-stat {
+      text-align: right;
+    }
+    .stat-val {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--sky-light);
+      display: block;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-lbl {
+      font-size: 0.85rem;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      color: var(--slate-500);
+      border-top: 1px solid var(--slate-200);
+      padding-top: 8px;
+    }
+    .footer-brand {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* ============================================================
+       FLOATING INTERACTIVE NAVIGATION BAR
+       ============================================================ */
+    .nav-bar {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 50px;
+      padding: 7px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      z-index: 1500;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      padding: 7px 16px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .counter-text {
+      color: #F8FAFC;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 800;
+      min-width: 75px;
+      text-align: center;
+    }
+
+    .dots-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .dot:hover {
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .dot.active {
+      width: 26px;
+      background: var(--sky-light);
+    }
+
+    .kbd-hint {
+      display: flex;
+      gap: 4px;
+      padding-left: 8px;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .kbd-hint kbd {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #94A3B8;
+      font-size: 0.75rem;
+      font-family: monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Edge Chevrons */
+    .edge-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 70px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1200;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+    }
+    .edge-nav:hover {
+      background: var(--primary);
+    }
+    .edge-nav.prev { left: 14px; }
+    .edge-nav.next { right: 14px; }
+
+    /* ============================================================
+       PRINT MEDIA (16:9 PDF EXPORT)
+       ============================================================ */
+    @page {
+      size: 16in 9in;
+      margin: 0;
+    }
+    @media print {
+      body {
+        background: transparent !important;
+        overflow: visible !important;
+        width: auto !important;
+        height: auto !important;
+        display: block !important;
+      }
+      .top-progress, .nav-bar, .edge-nav {
+        display: none !important;
+      }
+      .presentation-container {
+        display: block !important;
+        width: auto !important;
+        height: auto !important;
+        padding-bottom: 0 !important;
+      }
+      .stage-wrapper {
+        transform: none !important;
+        width: 16in !important;
+        height: auto !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+        background: transparent !important;
+      }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        width: 16in !important;
+        height: 9in !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-progress" id="progressBar"></div>
+
+<div class="presentation-container">
+
+  <!-- EDGE NAVIGATION BUTTONS -->
+  <button class="edge-nav prev" id="edgePrev" title="Slide trước (Phím ←)">&#10094;</button>
+  <button class="edge-nav next" id="edgeNext" title="Slide sau (Phím →)">&#10095;</button>
+
+  <!-- 1600x900 PRESENTATION STAGE -->
+  <div class="stage-wrapper" id="slideStage">
+
+    <!-- ==================== SLIDE 0: TRANG BÌA ==================== -->
+    <section class="slide slide-cover active" data-index="0">
+      <div class="cover-top">
+        <div class="cover-badge">
+          🏥 VinUni Exploration Sprint • Vinmec Healthcare System
+        </div>
+        <div class="cover-date">Tháng 10 / 2026</div>
+      </div>
+
+      <div class="cover-main">
+        <h1 class="cover-title">VINCARE COPILOT</h1>
+        <div class="cover-subtitle">Đơn giản hóa Đặt lịch • Sàng lọc Triệu chứng Lâm sàng • Tự động Tóm tắt Bệnh án SOAP</div>
+        <p class="cover-desc">
+          Giải pháp chuyển đổi trải nghiệm tiền khám thông minh: hỗ trợ người bệnh chọn đúng chuyên khoa và chuẩn bị chu đáo trước khám, đồng thời giải phóng bác sĩ khỏi gánh nặng nhập liệu hồ sơ bệnh án điện tử (EMR).
+        </p>
+
+        <div class="cover-pills">
+          <div class="cover-pill">📱 Giao diện Lưới 2x2 & GPS Tự động</div>
+          <div class="cover-pill">🩺 AI Clinical Triage & Red Flags</div>
+          <div class="cover-pill">📋 Tóm tắt Bệnh án SOAP trong 30 Giây</div>
+          <div class="cover-pill">⏱️ Thẻ Tiền khám Đếm ngược Nhịn ăn</div>
+        </div>
+      </div>
+
+      <div class="cover-footer">
+        <div class="cover-author">
+          Báo cáo viên: <strong>Hoài Nam</strong><br>
+          <span style="font-size: 1.05rem; color: #94A3B8;">Nhóm Nghiên cứu Đổi mới Sáng tạo Y tế VinUni</span>
+        </div>
+        <div class="cover-meta">
+          Phương pháp: <strong>Stanford Biodesign Framework</strong><br>
+          Tiêu chuẩn An toàn: <strong>WHO AI in Health & Red-Flags Protocol</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 1: THỰC TRẠNG ==================== -->
+    <section class="slide" data-index="1">
+      <div class="slide-header">
+        <div>
+          <span class="tagline">Giai đoạn Tiền khám • Khảo sát Ứng dụng Di động</span>
+          <h1 class="slide-title">1. Thực trạng & Trải nghiệm Ứng dụng MyVinmec</h1>
+        </div>
+        <div class="slide-num">01 / 05</div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card alert">
+            <div class="card-title red">⚠️ Rào cản Thao tác & Quảng cáo Lấn át</div>
+            <ul class="card-list red">
+              <li><strong>Popup quảng cáo 70% khi mở app:</strong> Người bệnh đang cần khám bị chặn bởi banner bán hàng; nút đóng (✕) quá nhỏ (~30dp) rất dễ bấm nhầm.</li>
+              <li><strong>Lưới 12 icon 3x4 dồn dập:</strong> Nhồi nhét quá nhiều tính năng, trong đó 4 dịch vụ bị cắt cụt tên ba chấm (Danh mục giá..., Nhắc lịch uốn...).</li>
+              <li><strong>Cấp cứu 24/7 thiếu nhận diện SOS:</strong> Hotline khẩn cấp bị cào bằng như chuyên mục đọc báo thông thường, không có màu cảnh báo đỏ.</li>
+            </ul>
+          </div>
+
+          <div class="card navy">
+            <div class="card-title">✕ Lỗi Giao diện & Tắc nghẽn Đặt lịch</div>
+            <ul class="card-list">
+              <li><strong>Nguy cơ xóa nhầm cơ sở khám:</strong> Tên viện bị cắt ngắn (BV Vinmec Oce...) kèm nút [✕] nằm sát mép rất dễ bấm xóa sạch lựa chọn.</li>
+              <li><strong>Chữ tiếng Việt bị xén cụt chân:</strong> Các nút chọn phương thức (bác sĩ, chuyên khoa) bị lỗi tràn khung, cắt mất nét chữ có dấu.</li>
+              <li><strong>Nút ĐẶT HẸN vi phạm chuẩn tương phản:</strong> Tỷ lệ tương phản chỉ đạt <strong>1.4:1</strong> (chuẩn WCAG AA là 4.5:1), không hề có gợi ý trường còn thiếu.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero-banner">
+          <div class="hero-text">
+            <strong>Đúc kết thực nghiệm:</strong> Ứng dụng hiện tại mang tính chất "siêu app thương mại", chưa ưu tiên tối đa cho tác vụ y tế cốt lõi: <em>Tìm đúng chuyên khoa, Đặt lịch nhanh và Tiếp cận cấp cứu tức thì.</em>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-val">&lt; 38dp</span>
+            <span class="stat-lbl">Kích thước nút chạm vi phạm chuẩn</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">VinCare Copilot • VinUni Exploration Sprint Vinmec</div>
+        <div>Khảo sát Trải nghiệm Thực tế</div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 2: VẤN ĐỀ RÚT RA ==================== -->
+    <section class="slide" data-index="2">
+      <div class="slide-header">
+        <div>
+          <span class="tagline">Nghiên cứu Người dùng • Phỏng vấn Bệnh nhân & Bác sĩ</span>
+          <h1 class="slide-title">2. Vấn đề Rút ra từ Người bệnh & Bác sĩ</h1>
+        </div>
+        <div class="slide-num">02 / 05</div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">👤 Góc nhìn Người bệnh (P1, P2)</div>
+            <ul class="card-list">
+              <li><strong>Bối rối trước ma trận chuyên khoa:</strong> Bệnh nhân chỉ biết mô tả cảm giác cơ thể nhưng bị ép phải tự chọn khoa trong danh sách hơn 30 chuyên khoa dài dằng dặc.</li>
+              <li><strong>Tâm lý lo sợ đặt sai khoa:</strong> Sợ chọn nhầm rồi đến viện phải đổi phòng, mất thời gian chờ đợi lại từ đầu.</li>
+              <li><strong>Mù mờ thông tin chuẩn bị trước khám:</strong> Không biết có phải nhịn ăn xét nghiệm không, thuốc huyết áp/tiểu đường có được uống không, dẫn đến bị hoãn khám.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🩺 Góc nhìn Bác sĩ Lâm sàng (D1)</div>
+            <ul class="card-list">
+              <li><strong>Gánh nặng gõ phím bệnh án điện tử (EMR):</strong> Bác sĩ mất tới 40% thời lượng thăm khám chỉ để gõ tay lại những thông tin cơ bản do người bệnh ghi quá sơ sài.</li>
+              <li><strong>Mất thời gian tương tác mắt-đối-mắt:</strong> Bác sĩ vừa khám vừa cắm mặt vào màn hình gõ máy tính, bệnh nhân ngồi im lặng bối rối.</li>
+              <li><strong>Bệnh án cũ rời rạc:</strong> Thiếu công cụ tự động tổng hợp tiền sử dị ứng, thuốc đang dùng và tóm tắt diễn biến triệu chứng nhanh trước ca khám.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero-banner teal">
+          <div class="hero-text">
+            <strong>Need Statement (Tuyên bố Nhu cầu Chuẩn Stanford Biodesign):</strong><br>
+            <em>"Người bệnh và nhân viên y tế cần một phương thức đơn giản hóa quy trình đặt lịch, hạn chế nhầm chuyên khoa, bóc tách lý do khám và tự động tổng hợp bệnh án trước buổi khám."</em>
+          </div>
+          <div class="hero-stat">
+            <span class="stat-val">40%</span>
+            <span class="stat-lbl">Thời gian bác sĩ phải gõ phím EMR</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">VinCare Copilot • VinUni Exploration Sprint Vinmec</div>
+        <div>Phân tích Nhu cầu Cốt lõi</div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 3: BEST PRACTICES ==================== -->
+    <section class="slide" data-index="3">
+      <div class="slide-header">
+        <div>
+          <span class="tagline">Khảo cứu Chuẩn mực Toàn cầu • 3 Best Practices</span>
+          <h1 class="slide-title">3. Bài học Đắt giá từ Thực hành Quốc tế</h1>
+        </div>
+        <div class="slide-num">03 / 05</div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card primary">
+            <div class="card-title teal">
+              <span class="flag-tag">UK / Đức</span> Ada Health
+            </div>
+            <div class="card-subtitle">AI Sàng lọc Triệu chứng & Triage</div>
+            <ul class="card-list">
+              <li><strong>Đối thoại động thích ứng:</strong> AI hỏi câu hỏi lâm sàng theo diễn biến, phân tầng 4 cấp độ khẩn cấp.</li>
+              <li><strong>Độ chính xác 97.4%:</strong> Phân luồng ca khẩn cấp xuất sắc (nghiên cứu độc lập BMJ Open).</li>
+              <li><strong>Bài học cho Vinmec:</strong> AI chỉ làm Triage định tuyến chuyên khoa, không chẩn đoán bệnh thay bác sĩ; quét cờ đỏ Red Flags.</li>
+            </ul>
+          </div>
+
+          <div class="card primary">
+            <div class="card-title teal">
+              <span class="flag-tag">Hoa Kỳ</span> Mayo Clinic
+            </div>
+            <div class="card-subtitle">Hỏi bệnh Tiền khám & SOAP EMR</div>
+            <ul class="card-list">
+              <li><strong>Hỏi bệnh tự động 24h trước:</strong> Người bệnh trả lời bảng hỏi trên app MyChart trước khi đến viện.</li>
+              <li><strong>Tóm tắt chuẩn SOAP:</strong> AI chuyển lời kể thành cấu trúc Subjective - Objective - Assessment - Plan.</li>
+              <li><strong>Bài học cho Vinmec:</strong> Giảm <strong>42% thời gian gõ phím</strong>, tăng tương tác mắt-đối-mắt từ 55% lên 82%.</li>
+            </ul>
+          </div>
+
+          <div class="card primary">
+            <div class="card-title teal">
+              <span class="flag-tag">Hoa Kỳ</span> One Medical
+            </div>
+            <div class="card-subtitle">Thẻ Hướng dẫn Tiền khám Động</div>
+            <ul class="card-list">
+              <li><strong>Trang chủ 1 câu hỏi:</strong> "Hôm nay bạn cảm thấy thế nào?", loại bỏ hoàn toàn ma trận menu.</li>
+              <li><strong>Dynamic Prep Card:</strong> Đếm ngược giờ nhịn ăn xét nghiệm, nhắc thuốc mạn tính, QR vào thẳng phòng khám.</li>
+              <li><strong>Bài học cho Vinmec:</strong> Chuyển từ ứng dụng ghi nhận mã hẹn sang đồng hành chuẩn bị chu đáo trước khám.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero-banner">
+          <div class="hero-text">
+            <strong>Điểm chung của các hệ thống hàng đầu:</strong> Thay vì bắt người bệnh tự chẩn đoán, công nghệ đóng vai trò <em>lớp đệm hỗ trợ hai đầu</em>: hướng dẫn người bệnh chuẩn bị tốt nhất và giải phóng bác sĩ khỏi gánh nặng hành chính.
+          </div>
+          <div class="hero-stat">
+            <span class="stat-val">82%</span>
+            <span class="stat-lbl">Tương tác trực tiếp Bác sĩ - Bệnh nhân</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">VinCare Copilot • VinUni Exploration Sprint Vinmec</div>
+        <div>Khảo cứu Thực hành Quốc tế</div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 4: ỨNG DỤNG VINCARE COPILOT ==================== -->
+    <section class="slide" data-index="4">
+      <div class="slide-header">
+        <div>
+          <span class="tagline">Giải pháp Đột phá • Bản Prototype Tương tác</span>
+          <h1 class="slide-title">4. Ứng dụng Giải pháp: VinCare Copilot</h1>
+        </div>
+        <div class="slide-num">04 / 05</div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card primary">
+            <div class="card-title teal">📱 Phía Bệnh nhân (Mobile View)</div>
+            <ul class="card-list">
+              <li><strong>Trang chủ Lưới 2x2 Clean Grid:</strong> 4 nút lớn (MyVinmec, Đặt lịch, Cấp cứu SOS đỏ, Liên hệ); vuốt ngang xem tính năng phụ.</li>
+              <li><strong>Tự động định vị viện bằng GPS:</strong> Gợi ý viện Vinmec gần nhất kèm số km; dropdown linh hoạt, bỏ nút xóa nhầm [✕].</li>
+              <li><strong>AI Triage bóc tách triệu chứng:</strong> Nhập/nói triệu chứng tự do; AI gợi ý đúng chuyên khoa và đề xuất bác sĩ phù hợp.</li>
+              <li><strong>Thẻ Chuẩn bị Tiền khám Động:</strong> Đồng hồ đếm ngược nhịn ăn, nhắc uống thuốc, mã QR tiếp đón Fast-track.</li>
+            </ul>
+          </div>
+
+          <div class="card navy">
+            <div class="card-title">💻 Phía Bác sĩ & An toàn Y tế</div>
+            <ul class="card-list">
+              <li><strong>Bản Tóm tắt Lâm sàng 30s Chuẩn SOAP:</strong> AI tự động chuyển lời kể của bệnh nhân + bệnh án cũ thành cấu trúc SOAP cho bác sĩ đọc nhanh trước ca khám.</li>
+              <li><strong>Giảm áp lực gõ phím EMR:</strong> Bác sĩ dán kết quả 1–chạm vào phần mềm viện, dành toàn bộ thời gian thăm khám bệnh nhân.</li>
+              <li><strong>Cầu dao Cấp cứu Red Flags:</strong> Tự động nhận diện dấu hiệu nguy kịch (đột quỵ FAST, đau ngực cấp) để ngắt luồng đặt hẹn, bật cảnh báo gọi 115 / Vinmec 24/7.</li>
+              <li><strong>Nguyên tắc:</strong> Triage phân luồng, không chẩn đoán bệnh thay bác sĩ.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero-banner teal">
+          <div class="hero-text">
+            <strong>Kiến trúc Tương thích Cao:</strong> Bản Prototype đã hoàn thiện trên nền tảng Web App chuẩn di động (380px), kiểm thử thực tế trên 3 người dùng thật và sẵn sàng tích hợp API webhook vào hệ thống Vinmec.
+          </div>
+          <div class="hero-stat">
+            <span class="stat-val">30s</span>
+            <span class="stat-lbl">Nắm trọn bệnh sử trước khi khám</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">VinCare Copilot • VinUni Exploration Sprint Vinmec</div>
+        <div>Nguyên mẫu Giải pháp Thực tiễn</div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 5: KẾT LUẬN & TÁC ĐỘNG ==================== -->
+    <section class="slide" data-index="5">
+      <div class="slide-header">
+        <div>
+          <span class="tagline">Tác động Dự kiến • Tầm nhìn Đổi mới Sáng tạo</span>
+          <h1 class="slide-title">5. Kết luận & Tác động Mang Lại cho Vinmec</h1>
+        </div>
+        <div class="slide-num">05 / 05</div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title" style="color: #0284C7;">🎯 Với Bệnh nhân</div>
+            <ul class="card-list">
+              <li><strong>100% đúng chuyên khoa:</strong> Không còn hoang mang tự chọn khoa hay lo sợ đặt nhầm.</li>
+              <li><strong>Chấm dứt việc hủy xét nghiệm:</strong> Được nhắc nhịn ăn và dùng thuốc chính xác trước giờ khám.</li>
+              <li><strong>An tâm & Chủ động:</strong> Nắm rõ lộ trình từ ở nhà đến phòng khám bệnh viện.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="color: #059669;">👨‍⚕️ Với Bác sĩ Lâm sàng</div>
+            <ul class="card-list">
+              <li><strong>Tiết kiệm &gt;40% thời gian gõ phím:</strong> Đã có bản tóm tắt SOAP 30 giây chuẩn bị sẵn.</li>
+              <li><strong>Tăng chất lượng tư vấn:</strong> Trả lại ca khám tập trung tương tác mắt-đối-mắt với người bệnh.</li>
+              <li><strong>Giảm nguy cơ kiệt sức (Burnout):</strong> Xóa bỏ gánh nặng nhập liệu hành chính lặp đi lặp lại.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="color: var(--primary);">🏥 Với Hệ thống Vinmec</div>
+            <ul class="card-list">
+              <li><strong>Tối ưu hóa công suất vận hành:</strong> Giảm tỷ lệ trễ hẹn, giảm tải quầy tiếp đón ban đầu.</li>
+              <li><strong>Đảm bảo an toàn lâm sàng:</strong> Bộ lọc Red Flags ngăn chặn bỏ sót ca nguy kịch.</li>
+              <li><strong>Nâng tầm thương hiệu y tế:</strong> Trải nghiệm chăm sóc số hóa đẳng cấp quốc tế xứng tầm Vinmec.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hero-banner navy-blue">
+          <div class="hero-text">
+            <strong>Thông điệp Kết luận:</strong> VinCare Copilot không tìm cách thay thế bác sĩ, mà dùng AI để <em>loại bỏ rào cản thao tác</em>, giải phóng bác sĩ khỏi bàn phím và trao lại sự chăm sóc trọn vẹn, thấu cảm cho người bệnh.
+          </div>
+          <div class="hero-stat">
+            <span class="stat-val">100%</span>
+            <span class="stat-lbl">Chuẩn hóa Trải nghiệm Tiền khám</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">VinCare Copilot • VinUni Exploration Sprint Vinmec</div>
+        <div>Tổng kết & Giá trị Thực tiễn</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FLOATING INTERACTIVE CONTROLS BAR -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" title="Slide trước (Phím ← hoặc PageUp)">
+      <span>◀</span> Trước
+    </button>
+
+    <div class="counter-text" id="slideCounter">Bìa / 5</div>
+
+    <div class="dots-group" id="dotsGroup">
+      <div class="dot active" data-goto="0" title="Trang Bìa"></div>
+      <div class="dot" data-goto="1" title="1. Thực trạng & Trải nghiệm"></div>
+      <div class="dot" data-goto="2" title="2. Vấn đề Rút ra"></div>
+      <div class="dot" data-goto="3" title="3. Bài học Quốc tế"></div>
+      <div class="dot" data-goto="4" title="4. Ứng dụng VinCare Copilot"></div>
+      <div class="dot" data-goto="5" title="5. Kết luận & Tác động"></div>
+    </div>
+
+    <button class="nav-btn" id="nextBtn" title="Slide sau (Phím → hoặc Phím cách)">
+      Sau <span>▶</span>
+    </button>
+
+    <div class="kbd-hint">
+      <kbd>←</kbd> <kbd>→</kbd> <kbd>Space</kbd>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const stage = document.getElementById('slideStage');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const edgePrev = document.getElementById('edgePrev');
+    const edgeNext = document.getElementById('edgeNext');
+    const counter = document.getElementById('slideCounter');
+    const dots = document.querySelectorAll('.dot');
+    const progressBar = document.getElementById('progressBar');
+
+    let currentIndex = 0;
+
+    // Automatic Stage Fitting: leaving ample space for floating navbar
+    function fitStage() {
+      const padX = 40;
+      const padY = 95; // Ample breathing room for bottom navbar
+      const availW = Math.max(300, window.innerWidth - padX);
+      const availH = Math.max(200, window.innerHeight - padY);
+      const scale = Math.min(availW / 1600, availH / 900);
+      stage.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener('resize', fitStage);
+    fitStage();
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      currentIndex = index;
+
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentIndex);
+      });
+
+      dots.forEach((d, idx) => {
+        d.classList.toggle('active', idx === currentIndex);
+      });
+
+      if (currentIndex === 0) {
+        counter.textContent = 'Bìa / 5';
+      } else {
+        counter.textContent = `0${currentIndex} / 05`;
+      }
+
+      progressBar.style.width = ((currentIndex) / (totalSlides - 1) * 100) + '%';
+
+      prevBtn.disabled = (currentIndex === 0);
+      edgePrev.style.display = (currentIndex === 0) ? 'none' : 'flex';
+      nextBtn.disabled = (currentIndex === totalSlides - 1);
+      edgeNext.style.display = (currentIndex === totalSlides - 1) ? 'none' : 'flex';
+
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, null, '#' + currentIndex);
+      }
+    }
+
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) updateSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) updateSlide(currentIndex - 1);
+    }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    edgePrev.addEventListener('click', prevSlide);
+    edgeNext.addEventListener('click', nextSlide);
+
+    dots.forEach(d => {
+      d.addEventListener('click', function() {
+        const target = parseInt(this.getAttribute('data-goto'), 10);
+        updateSlide(target);
+      });
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'Enter') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        updateSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        updateSlide(totalSlides - 1);
+      }
+    });
+
+    // Touch swipe for tablets & mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+    window.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) nextSlide();
+      else if (touchEndX - touchStartX > 50) prevSlide();
+    }, false);
+
+    // Initial load from URL hash or default 0
+    let startIdx = 0;
+    const hashMatch = window.location.hash.match(/#(\d+)/);
+    if (hashMatch) {
+      startIdx = parseInt(hashMatch[1], 10);
+    }
+    updateSlide(startIdx);
+  })();
+</script>
+
+</body>
+</html>

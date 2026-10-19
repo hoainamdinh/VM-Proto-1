@@ -1,0 +1,282 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 710" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; fill: #002D62; letter-spacing: 0.3px; }
+      .subtitle { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 12px; fill: #475569; }
+      .header-title { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 800; fill: #FFFFFF; letter-spacing: 0.6px; }
+      .card-title { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 11.5px; font-weight: 700; fill: #0F172A; }
+      .card-text { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 10px; fill: #334155; line-height: 1.4; }
+      .pain-title { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 800; fill: #B91C1C; letter-spacing: 0.3px; }
+      .pain-title-critical { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 800; fill: #DC2626; letter-spacing: 0.3px; }
+      .ai-title { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 800; fill: #047857; letter-spacing: 0.3px; }
+      .emotion-badge-text { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 9.5px; font-weight: 700; }
+      .axis-label { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Plus Jakarta Sans', sans-serif; font-size: 10px; fill: #64748B; font-weight: 600; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.06"/>
+    </filter>
+    <filter id="shadow-critical" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#EF4444" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="710" fill="#F8FAFC" rx="12"/>
+
+  <!-- Main Header Banner -->
+  <rect x="30" y="18" width="1140" height="64" rx="8" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+  <text x="50" y="44" class="title">BẢN ĐỒ HÀNH TRÌNH NGƯỜI BỆNH (PATIENT JOURNEY MAP)</text>
+  <text x="50" y="65" class="subtitle">Khoảnh khắc: Đặt lịch khám &amp; Chuẩn bị trước khi đến viện | Persona: Anh Thế (P1, NVVP) &amp; Chị Mai (P2, Mẹ bỉm) | Trọng tâm: App MyVinmec &amp; BV Vinmec</text>
+
+  <!-- ==================== STAGE 1: KHỞI PHÁT TRIỆU CHỨNG ==================== -->
+  <g transform="translate(30, 94)">
+    <!-- Column Header -->
+    <rect width="216" height="38" rx="6" fill="#002D62"/>
+    <text x="108" y="24" class="header-title" text-anchor="middle">1. KHỞI PHÁT TRIỆU CHỨNG</text>
+    
+    <!-- Action Card -->
+    <rect y="44" width="216" height="116" rx="6" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="12" y="64" class="card-title">Hành vi &amp; Điểm chạm</text>
+    <text x="12" y="81" class="card-text">• Cảm nhận đau tức bụng, sốt, ợ hơi</text>
+    <text x="12" y="97" class="card-text">• Tra Google, hỏi ý kiến người thân</text>
+    <text x="12" y="113" class="card-text">• Quyết định đặt khám tại Vinmec</text>
+    <text x="12" y="129" class="card-text" fill="#64748B">• Touchpoint: Thể chất, Google Search</text>
+    <!-- Emotion Badge Pill -->
+    <rect x="12" y="137" width="192" height="17" rx="8.5" fill="#FFE4E6"/>
+    <text x="108" y="149" class="emotion-badge-text" fill="#E11D48" text-anchor="middle">Lo âu (-1) • Bất an, sợ bệnh nặng</text>
+
+    <!-- Pain Point Card -->
+    <rect y="166" width="216" height="118" rx="6" fill="#FEF2F2" stroke="#FCA5A5" filter="url(#shadow)"/>
+    <text x="12" y="185" class="pain-title">ĐIỂM ĐAU #1: THIẾU ĐỊNH HƯỚNG</text>
+    <text x="12" y="203" class="card-text">• Thiếu kênh định hướng y tế ban đầu</text>
+    <text x="12" y="219" class="card-text">• Tra Google ra toàn bệnh hiểm nghèo</text>
+    <text x="12" y="235" class="card-text">  khiến người bệnh thêm hoang mang</text>
+    <text x="12" y="251" class="card-text">• Băn khoăn không biết có cần đi viện</text>
+    <text x="12" y="267" class="card-text">  ngay hay tự mua thuốc điều trị</text>
+
+    <!-- AI Opportunity Card -->
+    <rect y="290" width="216" height="124" rx="6" fill="#ECFDF5" stroke="#A7F3D0" filter="url(#shadow)"/>
+    <text x="12" y="309" class="ai-title">CƠ HỘI ĐỘT PHÁ CỦA AI</text>
+    <text x="12" y="327" class="card-text" font-weight="700" fill="#065F46">• AI Clinical Intake &amp; Triage:</text>
+    <text x="12" y="343" class="card-text">  Lắng nghe triệu chứng đời thường</text>
+    <text x="12" y="359" class="card-text">  bằng giọng nói / văn bản tự nhiên</text>
+    <text x="12" y="375" class="card-text">• Trấn an tâm lý, bóc tách dấu hiệu</text>
+    <text x="12" y="391" class="card-text">  lâm sàng ban đầu chính xác</text>
+  </g>
+
+  <!-- ==================== STAGE 2: MỞ APP & ĐỊNH HƯỚNG ==================== -->
+  <g transform="translate(261, 94)">
+    <!-- Column Header -->
+    <rect width="216" height="38" rx="6" fill="#0A3A60"/>
+    <text x="108" y="24" class="header-title" text-anchor="middle">2. MỞ APP &amp; ĐỊNH HƯỚNG</text>
+    
+    <!-- Action Card -->
+    <rect y="44" width="216" height="116" rx="6" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="12" y="64" class="card-title">Hành vi &amp; Điểm chạm</text>
+    <text x="12" y="81" class="card-text">• Mở ứng dụng di động MyVinmec</text>
+    <text x="12" y="97" class="card-text">• Quét mắt tìm nhanh nút "Đặt khám"</text>
+    <text x="12" y="113" class="card-text">• Thấy nhiều banner, sổ tiêm, ưu đãi</text>
+    <text x="12" y="129" class="card-text" fill="#64748B">• Touchpoint: Màn hình Home MyVinmec</text>
+    <!-- Emotion Badge Pill -->
+    <rect x="12" y="137" width="192" height="17" rx="8.5" fill="#FEF9C3"/>
+    <text x="108" y="149" class="emotion-badge-text" fill="#A16207" text-anchor="middle">Ức chế (-1) • Rối mắt, ngộp tính năng</text>
+
+    <!-- Pain Point Card -->
+    <rect y="166" width="216" height="118" rx="6" fill="#FEF2F2" stroke="#FCA5A5" filter="url(#shadow)"/>
+    <text x="12" y="185" class="pain-title">ĐIỂM ĐAU #2: QUÁ TẢI NHẬN THỨC</text>
+    <text x="12" y="203" class="card-text">• Popup quảng cáo 70% chiếm màn hình</text>
+    <text x="12" y="219" class="card-text">• Lưới 12 icon dồn dập, tên bị cắt cụt</text>
+    <text x="12" y="235" class="card-text">• Nút đặt lịch không nổi bật trực quan</text>
+    <text x="12" y="251" class="card-text">• Hotline cấp cứu thiếu nhận diện đỏ,</text>
+    <text x="12" y="267" class="card-text">  bị cào bằng như chuyên mục tin tức</text>
+
+    <!-- AI Opportunity Card -->
+    <rect y="290" width="216" height="124" rx="6" fill="#ECFDF5" stroke="#A7F3D0" filter="url(#shadow)"/>
+    <text x="12" y="309" class="ai-title">CƠ HỘI ĐỘT PHÁ CỦA AI</text>
+    <text x="12" y="327" class="card-text" font-weight="700" fill="#065F46">• Contextual Adaptive UI:</text>
+    <text x="12" y="343" class="card-text">  Lưới 2x2 tinh giản, loại bỏ quảng cáo</text>
+    <text x="12" y="359" class="card-text">• Tự động định vị GPS viện gần nhất</text>
+    <text x="12" y="375" class="card-text">• Nút Cấp cứu SOS đỏ nổi bật 1-chạm</text>
+    <text x="12" y="391" class="card-text">• Trợ lý AI sẵn sàng hỗ trợ tại Home</text>
+  </g>
+
+  <!-- ==================== STAGE 3: ĐẶT LỊCH & CHỌN KHOA (CRITICAL VALLEY) ==================== -->
+  <g transform="translate(492, 94)">
+    <!-- Column Header -->
+    <rect width="216" height="38" rx="6" fill="#C2410C"/>
+    <text x="108" y="24" class="header-title" text-anchor="middle">3. ĐẶT LỊCH &amp; CHỌN KHOA</text>
+    
+    <!-- Action Card -->
+    <rect y="44" width="216" height="116" rx="6" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="12" y="64" class="card-title">Hành vi &amp; Điểm chạm</text>
+    <text x="12" y="81" class="card-text">• Chọn viện, chọn hình thức thăm khám</text>
+    <text x="12" y="97" class="card-text">• Lướt menu danh mục 30+ chuyên khoa</text>
+    <text x="12" y="113" class="card-text">• Gõ lý do khám theo cảm giác bản thân</text>
+    <text x="12" y="129" class="card-text" fill="#64748B">• Touchpoint: Form đặt hẹn, Dropdown</text>
+    <!-- Emotion Badge Pill -->
+    <rect x="12" y="137" width="192" height="17" rx="8.5" fill="#FEE2E2"/>
+    <text x="108" y="149" class="emotion-badge-text" fill="#DC2626" text-anchor="middle">Bối rối (-2) • Sợ đặt nhầm khoa</text>
+
+    <!-- Pain Point Card (CRITICAL VALLEY) -->
+    <rect y="166" width="216" height="118" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="2" filter="url(#shadow-critical)"/>
+    <text x="12" y="185" class="pain-title-critical">ĐIỂM ĐAU #3 (ĐÁY VỰC -2)</text>
+    <text x="12" y="203" class="card-text">• Ép bệnh nhân tự chẩn đoán khoa</text>
+    <text x="12" y="219" class="card-text">• Sợ đặt nhầm khoa tốn tiền, mất công</text>
+    <text x="12" y="235" class="card-text">  đến viện phải làm lại thủ tục từ đầu</text>
+    <text x="12" y="251" class="card-text">• Nút ĐẶT HẸN mờ, vi phạm tương phản</text>
+    <text x="12" y="267" class="card-text" font-weight="700" fill="#DC2626">• Rào cản chuyên môn lớn nhất hành trình</text>
+
+    <!-- AI Opportunity Card -->
+    <rect y="290" width="216" height="124" rx="6" fill="#ECFDF5" stroke="#A7F3D0" filter="url(#shadow)"/>
+    <text x="12" y="309" class="ai-title">CƠ HỘI ĐỘT PHÁ CỦA AI</text>
+    <text x="12" y="327" class="card-text" font-weight="700" fill="#065F46">• AI Clinical Triage &amp; Routing:</text>
+    <text x="12" y="343" class="card-text">  Bóc tách triệu chứng, gợi ý đúng</text>
+    <text x="12" y="359" class="card-text">  khoa kèm lý do lâm sàng minh bạch</text>
+    <text x="12" y="375" class="card-text">• Bộ lọc cờ đỏ (Red Flags) ngắt cấp cứu</text>
+    <text x="12" y="391" class="card-text">• Khớp bác sĩ phù hợp theo lịch trực</text>
+  </g>
+
+  <!-- ==================== STAGE 4: CHUẨN BỊ TIỀN KHÁM (CRITICAL) ==================== -->
+  <g transform="translate(723, 94)">
+    <!-- Column Header -->
+    <rect width="216" height="38" rx="6" fill="#0A3A60"/>
+    <text x="108" y="24" class="header-title" text-anchor="middle">4. CHUẨN BỊ TIỀN KHÁM</text>
+    
+    <!-- Action Card -->
+    <rect y="44" width="216" height="116" rx="6" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="12" y="64" class="card-title">Hành vi &amp; Điểm chạm</text>
+    <text x="12" y="81" class="card-text">• Nhận tin nhắn SMS xác nhận mã hẹn</text>
+    <text x="12" y="97" class="card-text">• Băn khoăn có phải nhịn ăn xét nghiệm</text>
+    <text x="12" y="113" class="card-text">• Chuẩn bị giấy tờ/thuốc theo trí nhớ</text>
+    <text x="12" y="129" class="card-text" fill="#64748B">• Touchpoint: SMS, Notification, Bữa ăn</text>
+    <!-- Emotion Badge Pill -->
+    <rect x="12" y="137" width="192" height="17" rx="8.5" fill="#E0E7FF"/>
+    <text x="108" y="149" class="emotion-badge-text" fill="#4338CA" text-anchor="middle">Bị động (-1) • Mù mờ hướng dẫn</text>
+
+    <!-- Pain Point Card (CRITICAL) -->
+    <rect y="166" width="216" height="118" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="12" y="185" class="pain-title-critical">ĐIỂM ĐAU #4 (ĐỨT GÃY CHỈ DẪN)</text>
+    <text x="12" y="203" class="card-text">• Đứt gãy hướng dẫn chuẩn bị tiền khám</text>
+    <text x="12" y="219" class="card-text">• Không nhắc nhịn ăn -> lỡ ăn sáng</text>
+    <text x="12" y="235" class="card-text">  dẫn đến bị hủy xét nghiệm máu/nội soi</text>
+    <text x="12" y="251" class="card-text">• Mù mờ thuốc huyết áp/tiểu đường</text>
+    <text x="12" y="267" class="card-text">  dẫn đến nguy cơ tai biến tăng huyết áp</text>
+
+    <!-- AI Opportunity Card -->
+    <rect y="290" width="216" height="124" rx="6" fill="#ECFDF5" stroke="#A7F3D0" filter="url(#shadow)"/>
+    <text x="12" y="309" class="ai-title">CƠ HỘI ĐỘT PHÁ CỦA AI</text>
+    <text x="12" y="327" class="card-text" font-weight="700" fill="#065F46">• Dynamic Pre-visit Care Card:</text>
+    <text x="12" y="343" class="card-text">  Đồng hồ đếm ngược nhịn ăn chính xác</text>
+    <text x="12" y="359" class="card-text">• Dặn dò loại thuốc được uống/cần hoãn</text>
+    <text x="12" y="375" class="card-text">• Checklist giấy tờ tùy thân &amp; BHYT</text>
+    <text x="12" y="391" class="card-text">• Mã QR tiếp đón Fast-track tại quầy</text>
+  </g>
+
+  <!-- ==================== STAGE 5: ĐẾN VIỆN & CHECK-IN ==================== -->
+  <g transform="translate(954, 94)">
+    <!-- Column Header -->
+    <rect width="216" height="38" rx="6" fill="#002D62"/>
+    <text x="108" y="24" class="header-title" text-anchor="middle">5. ĐẾN VIỆN &amp; CHECK-IN</text>
+    
+    <!-- Action Card -->
+    <rect y="44" width="216" height="116" rx="6" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="12" y="64" class="card-title">Hành vi &amp; Điểm chạm</text>
+    <text x="12" y="81" class="card-text">• Bước vào sảnh viện lớn Vinmec</text>
+    <text x="12" y="97" class="card-text">• Lúng túng tìm quầy lễ tân &amp; phòng khám</text>
+    <text x="12" y="113" class="card-text">• Vào phòng khám kể lại bệnh từ đầu</text>
+    <text x="12" y="129" class="card-text" fill="#64748B">• Touchpoint: Sảnh, Kiosk, Bàn khám BS</text>
+    <!-- Emotion Badge Pill -->
+    <rect x="12" y="137" width="192" height="17" rx="8.5" fill="#DBEAFE"/>
+    <text x="108" y="149" class="emotion-badge-text" fill="#1D4ED8" text-anchor="middle">Mệt mỏi (-1) • Lúng túng, chờ đợi</text>
+
+    <!-- Pain Point Card -->
+    <rect y="166" width="216" height="118" rx="6" fill="#FEF2F2" stroke="#FCA5A5" filter="url(#shadow)"/>
+    <text x="12" y="185" class="pain-title">ĐIỂM ĐAU #5: GÁNH NẶNG EMR</text>
+    <text x="12" y="203" class="card-text">• Bệnh nhân kể lại bệnh sử từ số 0</text>
+    <text x="12" y="219" class="card-text">• Bác sĩ mất 40% thời gian gõ phím EMR</text>
+    <text x="12" y="235" class="card-text">  thay vì tương tác mắt-đối-mắt</text>
+    <text x="12" y="251" class="card-text">• Hồ sơ cũ phân tán, rời rạc</text>
+    <text x="12" y="267" class="card-text">• Giảm chất lượng thăm khám &amp; tư vấn</text>
+
+    <!-- AI Opportunity Card -->
+    <rect y="290" width="216" height="124" rx="6" fill="#ECFDF5" stroke="#A7F3D0" filter="url(#shadow)"/>
+    <text x="12" y="309" class="ai-title">CƠ HỘI ĐỘT PHÁ CỦA AI</text>
+    <text x="12" y="327" class="card-text" font-weight="700" fill="#065F46">• Doctor-Ready SOAP Summary:</text>
+    <text x="12" y="343" class="card-text">  AI tự động cấu trúc bệnh sử 30 giây</text>
+    <text x="12" y="359" class="card-text">  đồng bộ vào màn hình trước ca khám</text>
+    <text x="12" y="375" class="card-text">• Trả lại 82% tương tác lắng nghe cho BS</text>
+    <text x="12" y="391" class="card-text">• Quét QR vào thẳng phòng khám ưu tiên</text>
+  </g>
+
+  <!-- ==================== BOTTOM EMOTIONAL CURVE GRAPH ==================== -->
+  <!-- Graph container occupies x:30 to 1170 (width:1140). Column centers inside this group are:
+       Col 1: 108 | Col 2: 339 | Col 3: 570 | Col 4: 801 | Col 5: 1032 -->
+  <g transform="translate(30, 538)">
+    <rect width="1140" height="152" rx="8" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+    <text x="24" y="26" class="card-title" font-size="12.5px" font-weight="800">ĐỒ THỊ TRẢI NGHIỆM CẢM XÚC (EMOTIONAL EXPERIENCE CURVE)</text>
+    
+    <!-- Y Axis Labels -->
+    <text x="24" y="52" class="axis-label">+ Tích cực (+2)</text>
+    <text x="24" y="82" class="axis-label">0 Trung lập</text>
+    <text x="24" y="118" class="axis-label">- Tiêu cực (-2)</text>
+
+    <!-- Horizontal Grid Lines -->
+    <!-- +2 Level (y=48) -->
+    <line x1="100" y1="48" x2="1115" y2="48" stroke="#E2E8F0" stroke-dasharray="3,3"/>
+    <!-- 0 Neutral Level (y=78) -->
+    <line x1="100" y1="78" x2="1115" y2="78" stroke="#CBD5E1" stroke-width="1.5"/>
+    <!-- -2 Valley Level (y=114) -->
+    <line x1="100" y1="114" x2="1115" y2="114" stroke="#E2E8F0" stroke-dasharray="3,3"/>
+
+    <!-- Vertical Column Alignment Guidelines: EXACTLY matching above column centers -->
+    <line x1="108" y1="36" x2="108" y2="128" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <line x1="339" y1="36" x2="339" y2="128" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <line x1="570" y1="36" x2="570" y2="128" stroke="#FEE2E2" stroke-width="2" stroke-dasharray="3,3"/>
+    <line x1="801" y1="36" x2="801" y2="128" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <line x1="1032" y1="36" x2="1032" y2="128" stroke="#E2E8F0" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+    <!-- Stage Indicators on Axis -->
+    <text x="108" y="140" class="axis-label" text-anchor="middle">GĐ 1: Khởi phát</text>
+    <text x="339" y="140" class="axis-label" text-anchor="middle">GĐ 2: Mở App</text>
+    <text x="570" y="140" class="axis-label" text-anchor="middle" fill="#DC2626" font-weight="bold">GĐ 3: Chọn khoa (Đáy vực)</text>
+    <text x="801" y="140" class="axis-label" text-anchor="middle">GĐ 4: Chuẩn bị</text>
+    <text x="1032" y="140" class="axis-label" text-anchor="middle">GĐ 5: Đến viện</text>
+
+    <!-- As-Is Journey Curve (Red / Smooth Bézier through exact column centers) -->
+    <!-- Points: (108, 94) -> (339, 94) -> (570, 114) -> (801, 102) -> (1032, 94) -->
+    <path d="M 108 94 C 200 94, 250 94, 339 94 C 430 94, 490 114, 570 114 C 660 114, 720 102, 801 102 C 890 102, 950 94, 1032 94" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- To-Be Journey Curve with AI Copilot (Emerald Green / Smooth Bézier) -->
+    <!-- Points: (108, 70) -> (339, 56) -> (570, 48) -> (801, 48) -> (1032, 48) -->
+    <path d="M 108 70 C 200 64, 250 56, 339 56 C 430 56, 490 48, 570 48 C 660 48, 720 48, 801 48 C 890 48, 950 48, 1032 48" fill="none" stroke="#10B981" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- Markers on As-Is Curve -->
+    <circle cx="108" cy="94" r="5" fill="#EF4444"/>
+    <circle cx="339" cy="94" r="5" fill="#EF4444"/>
+    <circle cx="570" cy="114" r="7" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="801" cy="102" r="5" fill="#EF4444"/>
+    <circle cx="1032" cy="94" r="5" fill="#EF4444"/>
+
+    <!-- Markers on AI Curve -->
+    <circle cx="108" cy="70" r="5" fill="#10B981"/>
+    <circle cx="339" cy="56" r="5" fill="#10B981"/>
+    <circle cx="570" cy="48" r="6" fill="#059669" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="801" cy="48" r="5" fill="#10B981"/>
+    <circle cx="1032" cy="48" r="5" fill="#10B981"/>
+
+    <!-- Callout Text on Valley -->
+    <rect x="505" y="97" width="130" height="15" rx="3" fill="#FEE2E2" stroke="#FCA5A5"/>
+    <text x="570" y="108" font-family="system-ui, sans-serif" font-size="9px" font-weight="700" fill="#DC2626" text-anchor="middle">Đáy vực cảm xúc (-2)</text>
+
+    <!-- Legend -->
+    <g transform="translate(680, 14)">
+      <line x1="0" y1="8" x2="24" y2="8" stroke="#EF4444" stroke-width="3"/>
+      <circle cx="12" cy="8" r="4" fill="#EF4444"/>
+      <text x="32" y="11" class="axis-label" fill="#B91C1C">Hiện trạng (As-Is): Rơi xuống vực -2 tại khâu chọn khoa &amp; tiền khám</text>
+
+      <line x1="0" y1="24" x2="24" y2="24" stroke="#10B981" stroke-width="3.5"/>
+      <circle cx="12" cy="24" r="4" fill="#10B981"/>
+      <text x="32" y="27" class="axis-label" fill="#047857">Tương lai với AI Triage &amp; Prep: Trải nghiệm an tâm (+2) liền mạch</text>
+    </g>
+  </g>
+</svg>

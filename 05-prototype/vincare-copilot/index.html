@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VinCare Copilot - Trợ lý Sàng lọc Triệu chứng & Chuẩn bị Tiền khám | Vinmec</title>
+  <meta name="description" content="Hệ thống AI Triage lâm sàng và thẻ hướng dẫn chuẩn bị tiền khám thông minh của Hệ thống Y tế Đa khoa Quốc tế Vinmec.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#002D62"/>
+            <path d="M16 6V26M6 16H26" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="24" cy="8" r="3" fill="#D4AF37"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">VINMEC <span class="brand-badge">COPILOT</span></span>
+          <span class="brand-sub">Hệ thống Trợ lý Tiền khám & AI Triage Lâm sàng</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <!-- View Toggle (Patient vs Clinician) -->
+        <div class="view-switcher" id="viewSwitcher">
+          <button class="switch-btn active" id="btnPatientView" onclick="switchView('patient')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Góc nhìn Người bệnh
+          </button>
+          <button class="switch-btn" id="btnDoctorView" onclick="switchView('doctor')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Góc nhìn Bác sĩ (SOAP 30s)
+          </button>
+        </div>
+
+        <!-- Emergency Hotline Badge -->
+        <a href="tel:1900232389" class="hotline-badge" title="Hotline Cấp cứu Vinmec 24/7">
+          <span class="pulse-dot"></span>
+          <span>Cấp cứu: <strong>1900 232389</strong></span>
+        </a>
+
+        <!-- Settings / Info -->
+        <button class="icon-btn" onclick="openModal('infoModal')" title="Thông tin & An toàn y tế">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    <!-- PATIENT VIEW (MYVINMEC MOBILE VIEW) -->
+    <div class="view-panel active" id="patientViewSection">
+      <!-- Mobile / Desktop Mode Control Bar -->
+      <div class="mobile-view-control-bar">
+        <div class="mode-toggle-group">
+          <button type="button" class="mode-toggle-btn active" id="btnModeMobile" onclick="togglePatientDisplayMode('mobile')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>📱 View Mobile MyVinmec (Khuyên dùng)</span>
+          </button>
+          <button type="button" class="mode-toggle-btn" id="btnModeDesktop" onclick="togglePatientDisplayMode('desktop')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>💻 View Mở rộng Desktop</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Desktop Stage Container (Viewport Fit for PC + Mobile Native) -->
+      <div class="desktop-stage-container">
+        <!-- LEFT COMPANION PANEL (Desktop Preview Console) -->
+        <aside class="desktop-companion-panel left-panel">
+          <div class="companion-card">
+            <div class="companion-header">
+              <span class="companion-badge-live">LIVE SYSTEM • JCI ACCREDITED</span>
+              <h3 class="companion-title">VINCARE COPILOT CONSOLE</h3>
+              <p class="companion-desc">Hệ thống Trợ lý Sàng lọc Triệu chứng & Triage Lâm sàng Vinmec</p>
+            </div>
+
+            <div class="companion-section">
+              <span class="companion-section-label">CHỌN NHANH KỊCH BẢN LÂM SÀNG:</span>
+              <div class="companion-scenario-list">
+                <button type="button" class="companion-scenario-btn active" id="desk-chip-p1" onclick="applyScenarioAndGoBooking('p1')">
+                  <div class="scen-icon icon-teal">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </div>
+                  <div class="scen-text">
+                    <strong>P1: Anh Thế (27 tuổi)</strong>
+                    <span>Đau tức thượng vị dạ dày • Dặn nhịn ăn 8h</span>
+                  </div>
+                  <span class="scen-arrow">→</span>
+                </button>
+
+                <button type="button" class="companion-scenario-btn" id="desk-chip-p2" onclick="applyScenarioAndGoBooking('p2')">
+                  <div class="scen-icon icon-blue">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+                  </div>
+                  <div class="scen-text">
+                    <strong>P2: Bé Minh (3 tuổi)</strong>
+                    <span>Sốt cao 38.8°C, ho nôn • Phân luồng Nhi</span>
+                  </div>
+                  <span class="scen-arrow">→</span>
+                </button>
+
+                <button type="button" class="companion-scenario-btn" id="desk-chip-p3" onclick="applyScenarioAndGoBooking('p3')">
+                  <div class="scen-icon icon-amber">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+                  </div>
+                  <div class="scen-text">
+                    <strong>P3: Bác Hùng (58 tuổi)</strong>
+                    <span>Thoái hóa khớp gối • Uống thuốc HA</span>
+                  </div>
+                  <span class="scen-arrow">→</span>
+                </button>
+
+                <button type="button" class="companion-scenario-btn emergency" id="desk-chip-em" onclick="applyScenarioAndGoBooking('emergency')">
+                  <div class="scen-icon icon-red">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  </div>
+                  <div class="scen-text">
+                    <strong style="color:#DC2626;">Cấp cứu Khẩn cấp (Red-Flag)</strong>
+                    <span>Đau thắt ngực dữ dội • Gọi 115 / 1900 232389</span>
+                  </div>
+                  <span class="scen-arrow" style="color:#DC2626;">🚨</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="companion-metrics-grid">
+              <div class="comp-metric-box">
+                <span class="metric-num">98%</span>
+                <span class="metric-lbl">Định tuyến đúng khoa</span>
+              </div>
+              <div class="comp-metric-box">
+                <span class="metric-num">-70%</span>
+                <span class="metric-lbl">Chờ đợi sảnh đón</span>
+              </div>
+              <div class="comp-metric-box">
+                <span class="metric-num">30s</span>
+                <span class="metric-lbl">Bác sĩ nắm bệnh sử</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- CENTER: SMARTPHONE RESPONSIVE CONTAINER (Viewport Fit for PC) -->
+        <div class="mobile-phone-wrapper" id="mobilePhoneWrapper">
+          <div class="smartphone-frame">
+            <div class="smartphone-screen" id="smartphoneScreen">
+
+              <!-- ==============================================================
+                   SCREEN 1: MYVINMEC MAIN HOME (Theo screenshot main.jpg)
+                   Main chỉ chứa: MyVinmec, Lịch hẹn, Cấp cứu, Liên hệ,... theo lưới 2x2
+                   Có thể lướt sang trái và phải để xem option khác, hiển thị to trong màn hình
+                   ============================================================== -->
+              <div class="myvm-screen myvm-screen-home active" id="myvmScreenHome">
+                <!-- 1. Phone Status Bar (From screenshot 14:23, 29%) -->
+                <div class="phone-status-bar">
+                  <span class="status-time">14:23</span>
+                  <div class="status-icons">
+                    <span>5G</span>
+                    <span>📶</span>
+                    <span>89% 🔋</span>
+                  </div>
+                </div>
+
+                <!-- 2. MyVinmec Header (screenshot main.jpg) -->
+                <div class="myvm-app-header">
+                  <div class="myvm-header-top">
+                    <div class="myvm-logo-text">
+                      <span>MyVinmec</span>
+                      <span class="myvm-logo-badge">COPILOT AI</span>
+                    </div>
+                    <div class="myvm-header-actions">
+                      <button type="button" class="myvm-circle-btn" title="Voucher ưu đãi" onclick="showToast('🎁 Đặc quyền thành viên Vinmec: Miễn phí AI Triage tiền khám')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+                      </button>
+                      <button type="button" class="myvm-circle-btn" title="Tìm kiếm dịch vụ" onclick="showToast('🔍 Tìm kiếm chuyên khoa, bác sĩ & tiện ích Vinmec')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <p class="myvm-slogan">Chăm sóc bằng tài năng, y đức và sự thấu cảm</p>
+                </div>
+
+                <!-- 3. Main Home Body Content (Scrollable inside phone) -->
+                <div class="myvm-app-body">
+                  <!-- Promo Banner (screenshot main.jpg) -->
+                  <div class="myvm-promo-banner">
+                    <div class="promo-text-wrap">
+                      <span class="promo-tag">GÓI TẦM SOÁT NGUY CƠ ĐỘT QUỴ</span>
+                      <h4 class="promo-title">Phát hiện sớm - Điều trị kịp thời</h4>
+                      <span class="promo-price">Chỉ từ 2.900.000 VNĐ*</span>
+                    </div>
+                    <button type="button" class="promo-badge-btn" onclick="showToast('Khám phá các gói khám sức khỏe tiêu chuẩn Vinmec')">Tìm hiểu</button>
+                  </div>
+
+                  <!-- 4. CORE FEATURE: 2x2 BIG TOUCH GRID CAROUSEL (Lướt sang trái/phải để xem option khác) -->
+                  <div class="myvm-carousel-container">
+                    <div class="myvm-carousel-header">
+                      <div class="myvm-section-title" style="margin-bottom:0;">Dịch vụ trọng tâm</div>
+                      <div class="myvm-carousel-nav-arrows">
+                        <button type="button" class="carousel-arrow-btn" onclick="scrollGridCarousel(-1)" title="Trang trước">‹</button>
+                        <button type="button" class="carousel-arrow-btn" onclick="scrollGridCarousel(1)" title="Trang sau">›</button>
+                      </div>
+                    </div>
+
+                    <!-- Carousel Track with CSS Scroll Snap -->
+                    <div class="myvm-grid-carousel" id="myvmGridCarousel" onscroll="handleCarouselScroll()">
+                      <!-- SLIDE 1 (2x2 Grid: Lịch hẹn, Cấp cứu, Liên hệ, Sổ tiêm) -->
+                      <div class="myvm-carousel-slide">
+                        <div class="myvm-card-2x2 card-primary" onclick="goToPatientScreen('booking')" title="Nhấn để mở luồng Đặt lịch khám AI">
+                          <div class="card-icon-wrap icon-calendar">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
+                              <line x1="16" y1="2" x2="16" y2="6"/>
+                              <line x1="8" y1="2" x2="8" y2="6"/>
+                              <line x1="3" y1="10" x2="21" y2="10"/>
+                              <path d="m9 16 2 2 4-4"/>
+                            </svg>
+                            <span class="card-badge-glow">AI Triage ✨</span>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Lịch hẹn</h3>
+                            <p class="card-desc">Đặt khám & Phân luồng AI</p>
+                          </div>
+                          <span class="card-tap-hint">Chạm để đặt hẹn →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2 card-emergency" onclick="openModal('emergencyHotlineModal')" title="Nhấn để gọi Cấp cứu khẩn cấp 24/7">
+                          <div class="card-icon-wrap icon-emergency">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M12 2v20M2 12h20"/>
+                              <circle cx="12" cy="12" r="9" stroke="#EF4444" stroke-width="1.8"/>
+                            </svg>
+                            <span class="card-badge-emergency">24/7 Khẩn</span>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title" style="color:#DC2626;">Cấp cứu 24/7</h3>
+                            <p class="card-desc">Hotline 1900 232389</p>
+                          </div>
+                          <span class="card-tap-hint" style="color:#DC2626;">Gọi cấp cứu 📞</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="openModal('contactModal')" title="Tổng đài chăm sóc khách hàng">
+                          <div class="card-icon-wrap icon-contact">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Liên hệ</h3>
+                            <p class="card-desc">Tổng đài CSKH toàn quốc</p>
+                          </div>
+                          <span class="card-tap-hint">Chi tiết liên hệ →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="openModal('vaccineModal')" title="Sổ tiêm chủng điện tử">
+                          <div class="card-icon-wrap icon-vaccine">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="m18 2 4 4M17 7l3-3M19 9l-9 9-4 1 1-4 9-9M14 4l6 6M8 14l-4 4"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Sổ tiêm</h3>
+                            <p class="card-desc">Lịch tiêm chủng & vaccine</p>
+                          </div>
+                          <span class="card-tap-hint">Xem sổ tiêm →</span>
+                        </div>
+                      </div>
+
+                      <!-- SLIDE 2 (2x2 Grid: Đơn thuốc, Hồ sơ khám, Tạm ứng, Hỏi bác sĩ) -->
+                      <div class="myvm-carousel-slide">
+                        <div class="myvm-card-2x2" onclick="openModal('prescriptionModal')" title="Đơn thuốc điện tử">
+                          <div class="card-icon-wrap icon-pill">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                              <path d="m8.5 8.5 7 7"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Đơn thuốc</h3>
+                            <p class="card-desc">Đơn thuốc số & nhắc giờ</p>
+                          </div>
+                          <span class="card-tap-hint">Xem đơn thuốc →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="viewPastEmrDetail()" title="Hồ sơ bệnh án điện tử">
+                          <div class="card-icon-wrap icon-records">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                              <path d="M9 12h6M9 16h4"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Hồ sơ khám</h3>
+                            <p class="card-desc">Bệnh án EMR & xét nghiệm</p>
+                          </div>
+                          <span class="card-tap-hint">Tra cứu bệnh án →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="showToast('Cổng thanh toán tạm ứng viện phí Vinmec Pay trực tuyến')">
+                          <div class="card-icon-wrap icon-billing">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="2" y="5" width="20" height="14" rx="2"/>
+                              <line x1="2" y1="10" x2="22" y2="10"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Tạm ứng</h3>
+                            <p class="card-desc">Tạm ứng viện phí & BHYT</p>
+                          </div>
+                          <span class="card-tap-hint">Thanh toán ngay →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="showToast('Dịch vụ Bác sĩ tư vấn trực tuyến Tele-health Vinmec')">
+                          <div class="card-icon-wrap icon-tele">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                              <path d="M12 7v6M9 10h6"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Hỏi bác sĩ</h3>
+                            <p class="card-desc">Tư vấn y tế từ xa trực tuyến</p>
+                          </div>
+                          <span class="card-tap-hint">Kết nối tư vấn →</span>
+                        </div>
+                      </div>
+
+                      <!-- SLIDE 3 (2x2 Grid: Dịch vụ y tế, Danh mục giá, Cẩm nang mẹ, Tất cả dịch vụ) -->
+                      <div class="myvm-carousel-slide">
+                        <div class="myvm-card-2x2" onclick="showToast('Gói khám sức khỏe tổng quát & chuyên sâu Vinmec')">
+                          <div class="card-icon-wrap icon-service">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 9h6M12 6v6"/>
+                            </svg>
+                            <span class="card-badge-glow" style="background:#EA580C;">Mới</span>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Dịch vụ y tế</h3>
+                            <p class="card-desc">Gói khám tổng quát Vinmec</p>
+                          </div>
+                          <span class="card-tap-hint">Khám phá gói →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="showToast('Tra cứu danh mục bảng giá dịch vụ y tế công khai')">
+                          <div class="card-icon-wrap icon-pricing">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                              <polyline points="14 2 14 8 20 8"/>
+                              <line x1="16" y1="13" x2="8" y2="13"/>
+                              <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Danh mục giá</h3>
+                            <p class="card-desc">Bảng giá viện phí minh bạch</p>
+                          </div>
+                          <span class="card-tap-hint">Tra cứu giá →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="showToast('Cẩm nang chăm sóc thai kỳ & nuôi dạy con chuẩn y khoa')">
+                          <div class="card-icon-wrap icon-mom">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DB2777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Cẩm nang mẹ</h3>
+                            <p class="card-desc">Sản nhi & chăm con chuẩn</p>
+                          </div>
+                          <span class="card-tap-hint">Đọc cẩm nang →</span>
+                        </div>
+
+                        <div class="myvm-card-2x2" onclick="showToast('Xem toàn bộ hơn 30+ tiện ích y tế số trên MyVinmec')">
+                          <div class="card-icon-wrap icon-all">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                              <rect x="3" y="3" width="7" height="7" rx="1"/>
+                              <rect x="14" y="3" width="7" height="7" rx="1"/>
+                              <rect x="14" y="14" width="7" height="7" rx="1"/>
+                              <rect x="3" y="14" width="7" height="7" rx="1"/>
+                            </svg>
+                          </div>
+                          <div class="card-info">
+                            <h3 class="card-title">Tất cả dịch vụ</h3>
+                            <p class="card-desc">Hơn 30+ tiện ích y tế số</p>
+                          </div>
+                          <span class="card-tap-hint">Xem danh mục →</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Pagination Dots & Swipe Hint -->
+                    <div class="myvm-carousel-pagination">
+                      <span class="carousel-dot active" id="dot-0" onclick="goToSlide(0)" title="Trang 1: Lịch hẹn, Cấp cứu, Liên hệ, Sổ tiêm"></span>
+                      <span class="carousel-dot" id="dot-1" onclick="goToSlide(1)" title="Trang 2: Đơn thuốc, Hồ sơ, Tạm ứng, Hỏi bác sĩ"></span>
+                      <span class="carousel-dot" id="dot-2" onclick="goToSlide(2)" title="Trang 3: Dịch vụ y tế, Giá, Cẩm nang, Tất cả"></span>
+                    </div>
+                    <div class="myvm-swipe-hint">
+                      <span>👈 Lướt ngang sang trái/phải để xem thêm tiện ích 👉</span>
+                    </div>
+                  </div>
+
+                  <!-- 5. Quick Test Persona Launchers (Auto-navigates to Booking View) -->
+                  <div class="myvm-quick-scenario-box">
+                    <div class="scenario-box-head">
+                      <span class="scenario-icon">⚡</span>
+                      <div>
+                        <strong style="font-size:0.78rem; color:#1E293B;">Thử nhanh kịch bản nghiên cứu:</strong>
+                        <p style="font-size:0.68rem; color:#64748B;">Bấm vào kịch bản để tự động mở màn hình Đặt lịch và phân tích AI</p>
+                      </div>
+                    </div>
+                    <div class="myvm-scenario-chips">
+                      <button type="button" class="myvm-chip" onclick="applyScenarioAndGoBooking('p1')">👤 P1: Anh Thế (27t) - Dạ dày</button>
+                      <button type="button" class="myvm-chip" onclick="applyScenarioAndGoBooking('p2')">👶 P2: Bé Minh (3t) - Sốt cao</button>
+                      <button type="button" class="myvm-chip" onclick="applyScenarioAndGoBooking('p3')">👴 P3: Bác Hùng (58t) - Khớp & HA</button>
+                      <button type="button" class="myvm-chip" style="color:#DC2626; border-color:#FCA5A5;" onclick="applyScenarioAndGoBooking('emergency')">🚨 Cấp cứu khẩn cấp</button>
+                    </div>
+                  </div>
+
+                  <!-- 6. AI Customer Care Banner (from main.jpg bottom) -->
+                  <div class="myvm-ai-banner" onclick="goToPatientScreen('booking')">
+                    <div class="ai-banner-content">
+                      <h4 class="ai-banner-title">Cổng dịch vụ khách hàng VinCare AI</h4>
+                      <p class="ai-banner-desc">Nhanh • Tiện • Dễ dàng • Định tuyến thông minh</p>
+                    </div>
+                    <div class="ai-avatar-badge">
+                      <span>🤖 AI</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Navigation Bar (Main Home) -->
+                <div class="myvm-bottom-nav">
+                  <div class="myvm-nav-tab active" onclick="goToPatientScreen('home')">
+                    <span class="nav-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </span>
+                    <span>Trang chủ</span>
+                  </div>
+                  <div class="myvm-nav-tab" onclick="viewPastEmrDetail()">
+                    <span class="nav-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg>
+                    </span>
+                    <span>Hồ sơ</span>
+                  </div>
+                  <div class="myvm-nav-center-btn" title="Đặt lịch hẹn" onclick="goToPatientScreen('booking')">
+                    <span class="nav-center-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+                    </span>
+                  </div>
+                  <div class="myvm-nav-tab" onclick="showToast('Không có thông báo mới')">
+                    <span class="nav-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </span>
+                    <span>Thông báo</span>
+                  </div>
+                  <div class="myvm-nav-tab" onclick="showToast('Tài khoản cá nhân: Anh Thế (VM-2026)')">
+                    <span class="nav-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <span>Tài khoản</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ==============================================================
+                   SCREEN 2: SPECIFIC BOOKING VIEW (Theo screenshot booking.jpg)
+                   Màn hình cụ thể khi ấn vào "Lịch hẹn" từ trang chủ
+                   Có nút ← Quay lại để trở về Trang chủ Main
+                   ============================================================== -->
+              <div class="myvm-screen myvm-screen-booking" id="myvmScreenBooking">
+                <!-- Phone Status Bar -->
+                <div class="phone-status-bar">
+                  <span class="status-time">14:24</span>
+                  <div class="status-icons">
+                    <span>5G</span>
+                    <span>📶</span>
+                    <span>89% 🔋</span>
+                  </div>
+                </div>
+
+                <!-- Booking View Header with Back Button (Back to Main) -->
+                <div class="myvm-booking-header">
+                  <button type="button" class="myvm-back-btn" onclick="goToPatientScreen('home')" title="Quay lại Trang chủ MyVinmec">
+                    <span class="back-arrow">←</span>
+                    <span>Trang chủ</span>
+                  </button>
+                  <div class="booking-header-title">
+                    <h2>Đặt lịch hẹn</h2>
+                    <span class="booking-header-sub">VinCare Copilot AI Triage</span>
+                  </div>
+                  <button type="button" class="myvm-circle-btn small" onclick="openModal('emergencyHotlineModal')" title="Hotline cấp cứu">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </button>
+                </div>
+
+              <!-- Booking Body Form (From screenshot booking.jpg) -->
+              <div class="myvm-app-body booking-body">
+                <div class="myvm-booking-card">
+                  <!-- Section 1: Thông tin đặt hẹn & Dropdown chọn Bệnh viện + Auto GPS -->
+                  <div class="facility-section-header">
+                    <div class="myvm-section-title" style="margin-bottom:0;">Thông tin đặt hẹn</div>
+                    <button type="button" class="btn-gps-auto" id="btnAutoGpsTrigger" onclick="autoDetectGpsFacility(true)" title="Tự động tìm bệnh viện gần bạn nhất theo GPS">
+                      <span class="gps-pulse-dot"></span>
+                      <span id="autoGpsBtnLabel">🛰️ Auto GPS</span>
+                    </button>
+                  </div>
+                  
+                  <!-- Facility Dropdown Box (Styled exactly like booking.jpg with native Select) -->
+                  <div class="myvm-facility-dropdown-wrap">
+                    <div class="myvm-facility-box">
+                      <span class="myvm-facility-icon">🏥*</span>
+                      <select id="patientFacility" class="myvm-facility-select" onchange="onFacilityDropdownChange(this.value)">
+                        <optgroup label="📍 Khu vực Hà Nội">
+                          <option value="Times City">BV ĐKQT Vinmec Times City (Hà Nội)</option>
+                          <option value="Smart City">BV ĐKQT Vinmec Smart City (Hà Nội)</option>
+                          <option value="Metropolis">PK ĐKQT Vinmec Metropolis Liễu Giai</option>
+                          <option value="Royal City">PK ĐKQT Vinmec Royal City (Hà Nội)</option>
+                        </optgroup>
+                        <optgroup label="📍 Khu vực TP. Hồ Chí Minh">
+                          <option value="Central Park">BV ĐKQT Vinmec Central Park (TP.HCM)</option>
+                          <option value="Sai Gon">PK ĐKQT Vinmec Sài Gòn (Quận 1, TP.HCM)</option>
+                        </optgroup>
+                        <optgroup label="📍 Miền Trung & Khu vực khác">
+                          <option value="Da Nang">BV ĐKQT Vinmec Đà Nẵng</option>
+                          <option value="Hai Phong">BV ĐKQT Vinmec Hải Phòng</option>
+                          <option value="Ha Long">BV ĐKQT Vinmec Hạ Long (Quảng Ninh)</option>
+                          <option value="Nha Trang">BV ĐKQT Vinmec Nha Trang (Khánh Hòa)</option>
+                          <option value="Phu Quoc">BV ĐKQT Vinmec Phú Quốc (Kiên Giang)</option>
+                        </optgroup>
+                      </select>
+                      <span class="facility-select-arrow">▾</span>
+                    </div>
+
+                    <!-- GPS Distance / Proximity Sub-bar -->
+                    <div class="facility-gps-info-bar">
+                      <div class="gps-dist-indicator" id="facilityGpsDistIndicator">
+                        <span class="dist-pin">📍</span>
+                        <span id="facilityDistText">Cách bạn: ~1.2 km • Gần nhất ⭐</span>
+                      </div>
+                      <button type="button" class="btn-facility-view-all" onclick="openFacilityPickerModal()" title="Xem bản đồ và danh sách 11 cơ sở toàn quốc">
+                        Xem chi tiết 11 cơ sở →
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Chọn phương thức* (Segmented pills from booking.jpg) -->
+                  <div class="myvm-method-row">
+                    <div class="myvm-method-label">Chọn phương thức*</div>
+                    <div class="myvm-method-pills">
+                      <button type="button" class="myvm-pill-btn active" onclick="showToast('Chế độ AI Triage: Tự động phân luồng theo triệu chứng')">Đặt lịch theo AI Triệu chứng ✨</button>
+                      <button type="button" class="myvm-pill-btn" onclick="showToast('Đang tối ưu với chế độ Đặt lịch theo Bác sĩ')">Theo bác sĩ / Chuyên khoa</button>
+                    </div>
+                  </div>
+
+                  <!-- Section 2: Lịch hẹn (Date Picker from booking.jpg) -->
+                  <div class="myvm-section-title">Lịch hẹn</div>
+                  <div style="font-size:0.75rem; color:#4B5563; font-weight:700; margin-bottom:6px;">Ngày khám mong muốn*</div>
+                  <div class="myvm-date-grid">
+                    <div class="myvm-date-card" onclick="selectDateCard(this, '18')">
+                      <div class="myvm-date-m">Th10</div>
+                      <div class="myvm-date-d">18</div>
+                      <div class="myvm-date-sub">Hôm nay</div>
+                    </div>
+                    <div class="myvm-date-card active" onclick="selectDateCard(this, '19')">
+                      <div class="myvm-date-m">Th10</div>
+                      <div class="myvm-date-d">19</div>
+                      <div class="myvm-date-sub">Ngày mai</div>
+                    </div>
+                    <div class="myvm-date-card" onclick="selectDateCard(this, '20')">
+                      <div class="myvm-date-m">Th10</div>
+                      <div class="myvm-date-d">20</div>
+                      <div class="myvm-date-sub">Ngày kia</div>
+                    </div>
+                    <div class="myvm-date-card" onclick="showToast('Chọn ngày khám khác trên lịch hẹn')">
+                      <div class="myvm-date-m">Lịch</div>
+                      <div class="myvm-date-d">+</div>
+                      <div class="myvm-date-sub">Ngày khác</div>
+                    </div>
+                  </div>
+
+                  <!-- Section 3: Lý do khám (0/120 from booking.jpg) -->
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <div class="myvm-section-title" style="margin-bottom:0;">Lý do khám</div>
+                    <span style="font-size:0.75rem; color:#9CA3AF; font-weight:600;" id="charCounter">0/120</span>
+                  </div>
+
+                  <!-- Quick Test Persona Chips in Booking Form -->
+                  <div class="myvm-scenario-row">
+                    <span style="font-size:0.72rem; color:#6B7280; font-weight:600; display:block; margin-bottom:4px;">Kịch bản mẫu nhanh:</span>
+                    <div class="myvm-scenario-chips">
+                      <button type="button" class="myvm-chip active" id="chip-p1" onclick="applyScenario('p1')">P1: Anh Thế (27t) - Dạ dày</button>
+                      <button type="button" class="myvm-chip" id="chip-p2" onclick="applyScenario('p2')">P2: Bé Minh (3t) - Sốt cao</button>
+                      <button type="button" class="myvm-chip" id="chip-p3" onclick="applyScenario('p3')">P3: Bác Hùng (58t) - Khớp & HA</button>
+                      <button type="button" class="myvm-chip" id="chip-em" style="color:#DC2626; border-color:#FCA5A5;" onclick="applyScenario('emergency')">🚨 Cấp cứu</button>
+                    </div>
+                  </div>
+
+                  <!-- Textarea with Pen Icon and Mic -->
+                  <div class="myvm-textarea-container">
+                    <div class="myvm-textarea-header">
+                      <span>✏️*</span>
+                      <span style="font-size:0.75rem;">Mô tả cảm giác, vị trí khó chịu, tiền sử...</span>
+                    </div>
+                    <textarea class="myvm-textarea" id="symptomInput" rows="3" oninput="updateCharCount(this)" placeholder="Vui lòng mô tả rõ triệu chứng của bạn và nhu cầu thăm khám..."></textarea>
+                    <button type="button" class="myvm-mic-pill" id="micBtn" onclick="toggleSpeechRecognition()" title="Nói bằng giọng nói">🎙️</button>
+                  </div>
+
+                  <!-- Patient Age Input -->
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:0.78rem; color:#4B5563;">
+                    <span>Độ tuổi người khám:</span>
+                    <input type="number" id="patientAge" value="27" min="1" max="100" style="width:60px; padding:4px 8px; border:1px solid #D1D5DB; border-radius:6px; font-weight:700; text-align:center;">
+                  </div>
+
+                  <!-- Primary CTA Button -->
+                  <div style="margin-top:14px;">
+                    <button type="button" class="myvm-btn-book" id="btnAnalyze" onclick="runTriageAnalysis()">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      <span>PHÂN TÍCH TRIỆU CHỨNG & TÌM BÁC SĨ</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- RESULTS SECTION (Integrated into Booking View) -->
+                <div class="myvm-results-flow" id="resultsSection">
+                  <!-- Initial Empty State -->
+                  <div class="empty-state" id="emptyState" style="background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.04); text-align:center;">
+                    <div class="empty-illustration">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <h3 class="empty-title" style="font-size:0.95rem;">Chưa có dữ liệu phân tích</h3>
+                    <p class="empty-desc" style="font-size:0.8rem;">Nhập triệu chứng của bạn ở trên hoặc chọn 1 kịch bản mẫu để kích hoạt AI Triage và đề xuất bác sĩ phù hợp.</p>
+                  </div>
+
+                  <!-- Loading State -->
+                  <div class="loading-state" id="loadingState" style="display:none; background:#FFFFFF; border-radius:16px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.04); text-align:center;">
+                    <div class="spinner"></div>
+                    <h4 class="loading-title">VinCare AI đang xử lý lâm sàng...</h4>
+                    <div class="progress-steps" id="progressSteps">
+                      <div class="step-item active">1. Quét dấu hiệu cấp cứu (Red-flags)</div>
+                      <div class="step-item">2. Đối chiếu cây suy diễn lâm sàng</div>
+                      <div class="step-item">3. Định tuyến bác sĩ & chuẩn bị tiền khám</div>
+                    </div>
+                  </div>
+
+                  <!-- Emergency Alert Box -->
+                  <div class="emergency-box" id="emergencyBox" style="display:none; border-radius:16px; margin:0;">
+                    <div class="emergency-header">
+                      <div class="emergency-icon-pulse">🚨</div>
+                      <div>
+                        <h3 class="emergency-title">CẢNH BÁO DẤU HIỆU NGUY CẤP (RED-FLAG DETECTED)</h3>
+                        <p class="emergency-sub" id="emergencyReasonText">Phát hiện dấu hiệu đe dọa tính mạng cần cấp cứu ngay lập tức.</p>
+                      </div>
+                    </div>
+                    <div class="emergency-body">
+                      <p><strong>Khuyến cáo y khoa khẩn cấp:</strong> Ngừng ngay việc đặt lịch khám thường. Bệnh nhân cần được đưa đến khoa cấp cứu hoặc gọi xe cứu thương ngay lập tức.</p>
+                      <div class="emergency-actions">
+                        <a href="tel:115" class="btn btn-emergency">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          GỌI CẤP CỨU 115
+                        </a>
+                        <a href="tel:1900232389" class="btn btn-emergency-secondary">
+                          HOTLINE VINMEC: 1900 232389
+                        </a>
+                      </div>
+                      <div class="firstaid-guide">
+                        <strong>Sơ cứu ban đầu tại chỗ:</strong> Để người bệnh ngồi hoặc nằm nghỉ ngơi nơi thoáng khí, nới lỏng cổ áo, không tự ý cho ăn uống hoặc dùng thuốc khi chưa có chỉ định.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Main Result Content -->
+                  <div class="result-content" id="resultContent" style="display:none;">
+                    <!-- Triage Summary Card -->
+                    <div class="triage-card" style="border-radius:16px;">
+                      <div class="triage-badge-row">
+                        <span class="badge badge-triage" id="triageLevelBadge">Thăm khám Tiêu chuẩn</span>
+                        <span class="badge badge-confidence">Độ phù hợp: 98%</span>
+                      </div>
+                      <div class="dept-result">
+                        <span class="dept-label">Chuyên khoa khuyến nghị tốt nhất:</span>
+                        <h3 class="dept-name" id="recommendedDept">Nội Tiêu hóa & Gan mật</h3>
+                        <div class="facility-tag" id="facilityTag">📍 Vinmec Times City • Tầng 2, Khu Ngoại trú</div>
+                      </div>
+                      <!-- Medical Rationale -->
+                      <div class="rationale-box">
+                        <span class="rationale-title">Tại sao bạn nên khám chuyên khoa này?</span>
+                        <p class="rationale-text" id="rationaleText">Các triệu chứng đau tức thượng vị sau ăn và ợ chua phản ánh tình trạng kích ứng niêm mạc dạ dày, phù hợp nhất để bác sĩ Nội Tiêu hóa thăm khám lâm sàng.</p>
+                      </div>
+                    </div>
+
+                    <!-- Doctor Recommendation & Routing Section -->
+                    <div class="doctor-rec-card" id="doctorRecSection" style="border-radius:16px;">
+                      <div class="rec-header">
+                        <div class="rec-icon">👨‍⚕️</div>
+                        <div>
+                          <h4 class="rec-title">Đề xuất Bác sĩ Chuyên môn Phù hợp nhất</h4>
+                          <span class="rec-subtitle">AI điều hướng theo phân loại triệu chứng lâm sàng và cơ sở bạn đã chọn</span>
+                        </div>
+                      </div>
+                      <div class="doctor-list" id="doctorRecList">
+                        <!-- Injected dynamically by app.js -->
+                      </div>
+                    </div>
+
+                    <!-- Dynamic Pre-visit Guidance Card -->
+                    <div class="prep-card" style="border-radius:16px;">
+                      <div class="prep-header">
+                        <div class="prep-icon">📋</div>
+                        <div>
+                          <h4 class="prep-title">Thẻ Hướng Dẫn Chuẩn Bị Tiền Khám (Dynamic Prep)</h4>
+                          <span class="prep-subtitle">Cá nhân hóa theo triệu chứng của bạn để buổi khám đạt hiệu quả cao nhất</span>
+                        </div>
+                      </div>
+
+                      <!-- Fasting Guidance -->
+                      <div class="fasting-box" id="fastingBox">
+                        <div class="fasting-status">
+                          <span class="status-indicator warning"></span>
+                          <div>
+                            <strong id="fastingHeadline">Yêu cầu nhịn ăn: 08 tiếng trước khám</strong>
+                            <p class="fasting-note" id="fastingNote">Cần nhịn ăn thức ăn đặc để sẵn sàng cho chỉ định xét nghiệm máu hoặc nội soi dạ dày.</p>
+                          </div>
+                        </div>
+                        <div class="water-rule">
+                          <span class="water-badge">Nước uống:</span>
+                          <span id="waterRuleText">Được phép uống nước lọc tinh khiết với lượng nhỏ (1-2 ngụm). Tuyệt đối không uống sữa, nước ngọt hoặc cà phê.</span>
+                        </div>
+                      </div>
+
+                      <!-- Chronic Medication Guidance -->
+                      <div class="med-guidance" id="medGuidanceBox">
+                        <div class="med-header">
+                          <span class="med-icon">💊</span>
+                          <strong>Lưu ý về Thuốc đang uống hàng ngày:</strong>
+                        </div>
+                        <p class="med-text" id="medGuidanceText">Nếu bạn đang uống thuốc hạ huyết áp, HÃY UỐNG thuốc đúng giờ vào sáng sớm với một ngụm nước lọc nhỏ. Không tự ý ngắt cữ thuốc huyết áp.</p>
+                      </div>
+
+                      <!-- Interactive Checklist -->
+                      <div class="checklist-section">
+                        <strong class="checklist-title">Hành trang y tế cần mang theo:</strong>
+                        <ul class="checklist-items" id="checklistItems">
+                          <li>
+                            <label class="check-container">
+                              <input type="checkbox" checked>
+                              <span class="checkmark"></span>
+                              <span>CCCD gắn chip hoặc Thẻ BHYT / Thẻ bảo hiểm tư nhân</span>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="check-container">
+                              <input type="checkbox" checked>
+                              <span class="checkmark"></span>
+                              <span>Đơn thuốc và các loại thuốc đang uống ở nhà</span>
+                            </label>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <!-- Wayfinding & Fast-track Check-in -->
+                      <div class="wayfinding-box">
+                        <div class="wayfinding-icon">🏢</div>
+                        <div class="wayfinding-info">
+                          <strong>Chỉ dẫn luồng đón tiếp tại bệnh viện:</strong>
+                          <p id="wayfindingText">Bước vào Sảnh chính Vinmec Times City -> Đến Quầy Lễ tân số 03 (Làn Fast-track dành riêng cho bệnh nhân đã qua Triage AI) -> Quét mã QR tiếp đón không cần bốc số.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Booking Confirmation Action -->
+                    <div class="confirm-booking-row" style="flex-direction:column;">
+                      <button type="button" class="btn btn-success" id="btnConfirmBooking" onclick="confirmAppointment()" style="width:100%; justify-content:center;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span id="btnConfirmText">Xác nhận Đặt lịch với Bác sĩ & Lưu Thẻ Hướng Dẫn</span>
+                      </button>
+                      <button type="button" class="btn btn-outline" onclick="switchView('doctor')" style="width:100%; justify-content:center;">
+                        <span>Chuyển sang Góc nhìn Bác sĩ (Hồ sơ khám & Bệnh án cũ) →</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Navigation Bar (Booking View) -->
+              <div class="myvm-bottom-nav">
+                <div class="myvm-nav-tab" onclick="goToPatientScreen('home')">
+                  <span class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  </span>
+                  <span>Trang chủ</span>
+                </div>
+                <div class="myvm-nav-tab" onclick="viewPastEmrDetail()">
+                  <span class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg>
+                  </span>
+                  <span>Hồ sơ</span>
+                </div>
+                <div class="myvm-nav-center-btn active" title="Đặt lịch hẹn" onclick="goToPatientScreen('booking')">
+                  <span class="nav-center-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+                  </span>
+                </div>
+                <div class="myvm-nav-tab" onclick="showToast('Không có thông báo mới')">
+                  <span class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </span>
+                  <span>Thông báo</span>
+                </div>
+                <div class="myvm-nav-tab" onclick="showToast('Tài khoản cá nhân: Anh Thế (VM-2026)')">
+                  <span class="nav-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </span>
+                  <span>Tài khoản</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COMPANION PANEL (Patient Journey & Fast-Track Hospital Reception) -->
+      <aside class="desktop-companion-panel right-panel">
+        <div class="companion-card">
+          <div class="companion-header">
+            <span class="companion-badge-teal">LỘ TRÌNH 5 GIAI ĐOẠN KHÁM</span>
+            <h3 class="companion-title">HÀNH TRÌNH NGƯỜI BỆNH</h3>
+            <p class="companion-desc">Stanford Biodesign • Giảm 90% khám nhầm khoa</p>
+          </div>
+
+          <!-- Journey Step Progress Tracker -->
+          <div class="companion-journey-steps">
+            <div class="journey-item done" id="cStep1">
+              <div class="journey-dot">1</div>
+              <div class="journey-info">
+                <strong>Khởi phát Triệu chứng</strong>
+                <span>Đau tức thượng vị dạ dày, ợ chua</span>
+              </div>
+            </div>
+            <div class="journey-item active" id="cStep2">
+              <div class="journey-dot">2</div>
+              <div class="journey-info">
+                <strong>Mở App & Định hướng</strong>
+                <span>AI VinCare tiếp nhận triệu chứng ngôn ngữ tự nhiên</span>
+              </div>
+            </div>
+            <div class="journey-item" id="cStep3">
+              <div class="journey-dot">3</div>
+              <div class="journey-info">
+                <strong>Phân rã & Định tuyến Bác sĩ</strong>
+                <span>Bác sĩ chuyên khoa tiêu hóa, khớp slot khám</span>
+              </div>
+            </div>
+            <div class="journey-item" id="cStep4">
+              <div class="journey-dot">4</div>
+              <div class="journey-info">
+                <strong>Chuẩn bị Tiền khám tại nhà</strong>
+                <span>Dặn nhịn ăn 8h, xét nghiệm, mang bệnh án</span>
+              </div>
+            </div>
+            <div class="journey-item" id="cStep5">
+              <div class="journey-dot">5</div>
+              <div class="journey-info">
+                <strong>Đón tiếp Fast-Track tại viện</strong>
+                <span>Quét QR tại Quầy số 03, không bốc số chờ đợi</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fast-Track QR Live Card -->
+          <div class="companion-fasttrack-card">
+            <div class="fasttrack-head">
+              <span class="fasttrack-badge">THẺ TIẾP ĐÓN FAST-TRACK</span>
+              <span class="fasttrack-id">#VM-20261019-892</span>
+            </div>
+            <div class="fasttrack-body">
+              <div class="fasttrack-qr">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#002D62" stroke-width="1.8">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <rect x="14" y="14" width="4" height="4"/>
+                  <path d="M14 21h7M21 14v7M10 7h.01M17 7h.01M7 17h.01M10 14v4M14 10h4"/>
+                </svg>
+              </div>
+              <div class="fasttrack-meta">
+                <div class="meta-row"><strong>Bệnh nhân:</strong> <span id="compQrPatient">Anh Thế (27T)</span></div>
+                <div class="meta-row"><strong>Chuyên khoa:</strong> <span id="compQrDept">Nội Tiêu hóa & Gan mật</span></div>
+                <div class="meta-row"><strong>Cơ sở:</strong> <span>Vinmec Times City</span></div>
+                <div class="meta-row"><strong>Luồng đi:</strong> <span style="color:#059669; font-weight:700;">Làn Ưu tiên Quầy 03</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Companion Action CTA Group -->
+          <div class="companion-cta-group">
+            <button type="button" class="btn-companion-primary" onclick="switchView('doctor')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              <span>Xem Góc nhìn Bác sĩ (SOAP 30s) →</span>
+            </button>
+            <button type="button" class="btn-companion-secondary" onclick="viewPastEmrDetail()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Tra cứu Hồ sơ & Bệnh án cũ</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+    <!-- DOCTOR VIEW (CLINICIAN SOAP SUMMARY) -->
+    <div class="view-panel" id="doctorViewSection">
+      <div class="doctor-container">
+        <!-- Doctor Top Bar -->
+        <div class="doctor-banner">
+          <div class="doc-badge">
+            <span class="doc-icon">🩺</span>
+            <div>
+              <h2 class="doc-headline">BẢN TÓM TẮT LÂM SÀNG TIỀN KHÁM (PRE-VISIT CLINICAL SOAP SUMMARY)</h2>
+              <span class="doc-sub">Đồng bộ tự động từ VinCare Copilot Intake • Giúp bác sĩ nắm bắt bệnh sử trong 30 giây</span>
+            </div>
+          </div>
+          <div class="doc-actions">
+            <button class="btn btn-outline-light" onclick="copySoapToClipboard()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Sao chép vào EMR
+            </button>
+            <button class="btn btn-outline-light" onclick="window.print()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              In tóm tắt
+            </button>
+            <button class="btn btn-back" onclick="switchView('patient')">
+              ← Quay lại Người bệnh
+            </button>
+          </div>
+        </div>
+
+        <!-- Patient Demographics Header -->
+        <div class="patient-id-card">
+          <div class="id-item"><strong>Bệnh nhân:</strong> <span id="docPatientName">Anh Thế (P1)</span></div>
+          <div class="id-item"><strong>Tuổi:</strong> <span id="docPatientAge">27</span> • <strong>Giới tính:</strong> Nam</div>
+          <div class="id-item"><strong>Mã hồ sơ:</strong> <span class="mono">VM-2026-8942</span></div>
+          <div class="id-item"><strong>Chuyên khoa Triage:</strong> <span class="tag-blue" id="docDept">Nội Tiêu hóa & Gan mật</span></div>
+          <div class="id-item"><strong>Bác sĩ phụ trách:</strong> <span class="tag-gold" id="docAssignedDoctor">BS CKII. Trần Quang Minh</span></div>
+          <div class="id-item"><strong>Khung giờ hẹn:</strong> <span id="docApptSlot" style="color:#B45309; font-weight:700;">08:30 Sáng mai</span></div>
+        </div>
+
+        <!-- PHẦN 1: BÓC TÁCH & PHÂN RÃ LÝ DO KHÁM -->
+        <div class="doctor-section-card">
+          <div class="section-head">
+            <div class="head-title-wrap">
+              <span class="head-icon">🔍</span>
+              <div>
+                <h3 class="head-title">1. BÓC TÁCH & PHÂN RÃ LÝ DO KHÁM (CHIEF COMPLAINT DECONSTRUCTION)</h3>
+                <span class="head-sub">Tự động cấu trúc hóa từ mô tả tự nhiên của bệnh nhân thành các thông số lâm sàng</span>
+              </div>
+            </div>
+            <span class="badge badge-confidence">AI Deconstruction: 98%</span>
+          </div>
+          <div class="breakdown-grid" id="docBreakdownGrid">
+            <!-- Dynamic breakdown items injected by app.js -->
+          </div>
+        </div>
+
+        <!-- PHẦN 2: TỔNG HỢP CÔNG VIỆC CHO BÁC SĨ -->
+        <div class="doctor-section-card">
+          <div class="section-head">
+            <div class="head-title-wrap">
+              <span class="head-icon">📋</span>
+              <div>
+                <h3 class="head-title">2. TỔNG HỢP CÔNG VIỆC CHO BÁC SĨ (CLINICIAN ACTION CHECKLIST)</h3>
+                <span class="head-sub">Checklist nhiệm vụ trọng tâm trong ca khám, các câu hỏi khai thác nhanh và chỉ định dự kiến</span>
+              </div>
+            </div>
+            <span class="badge" style="background:#E0F2FE; color:#0369A1; font-weight:700;">Interactive Checklist</span>
+          </div>
+          <div class="task-checklist" id="docTaskChecklist">
+            <!-- Dynamic task checklist injected by app.js -->
+          </div>
+        </div>
+
+        <!-- PHẦN 3: HỒ SƠ BỆNH ÁN CŨ TẠI VINMEC -->
+        <div class="doctor-section-card">
+          <div class="section-head">
+            <div class="head-title-wrap">
+              <span class="head-icon">📂</span>
+              <div>
+                <h3 class="head-title">3. HỒ SƠ BỆNH ÁN CŨ TẠI VINMEC (HISTORICAL EMR & PAST RECORDS)</h3>
+                <span class="head-sub">Trích xuất tự động đợt khám gần nhất để đối chiếu tiến triển bệnh mà không cần hỏi lại từ đầu</span>
+              </div>
+            </div>
+            <span class="badge badge-match">Đã đồng bộ Vinmec EMR</span>
+          </div>
+          <div class="past-emr-card" id="docPastEmrCard">
+            <!-- Dynamic EMR details injected by app.js -->
+          </div>
+        </div>
+
+        <!-- 4-Box SOAP Layout -->
+        <div class="soap-grid">
+          <!-- S: Subjective -->
+          <div class="soap-card subjective">
+            <div class="soap-header">
+              <span class="soap-letter">S</span>
+              <div>
+                <h3 class="soap-title">SUBJECTIVE (Lời kể & Bệnh sử)</h3>
+                <span class="soap-sub">Khai báo tự nhiên từ người bệnh</span>
+              </div>
+            </div>
+            <div class="soap-body">
+              <div class="soap-section">
+                <strong>Lý do vào viện (Chief Complaint - CC):</strong>
+                <p id="soapCC">Đau tức vùng thượng vị kèm ợ chua và đầy trướng bụng 3 ngày nay.</p>
+              </div>
+              <div class="soap-section">
+                <strong>Bệnh sử hiện tại (History of Present Illness - HPI):</strong>
+                <p id="soapHPI">Bệnh nhân khởi phát đau âm ỉ vùng thượng vị cách đây 3 ngày, đau tăng lên rõ rệt sau các bữa ăn no. Kèm theo cảm giác ợ chua, nóng rát nhẹ sau xương ức và đầy hơi khó tiêu. Chưa ghi nhận nôn ra máu, không sốt, đi ngoài phân vàng sệt bình thường.</p>
+              </div>
+              <div class="soap-section">
+                <strong>Tiền sử bệnh & Dị ứng:</strong>
+                <p id="soapHistory">Chưa ghi nhận tiền sử loét dạ dày - tá tràng, không tiền sử dị ứng thuốc.</p>
+              </div>
+              <div class="soap-section">
+                <strong>Thuốc đang dùng tại nhà:</strong>
+                <p id="soapMeds">Tự uống men vi sinh không đỡ. Không dùng NSAIDs/corticoid.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- O: Objective -->
+          <div class="soap-card objective">
+            <div class="soap-header">
+              <span class="soap-letter">O</span>
+              <div>
+                <h3 class="soap-title">OBJECTIVE (Dữ liệu Lâm sàng ban đầu)</h3>
+                <span class="soap-sub">Thông số sàng lọc trước khám</span>
+              </div>
+            </div>
+            <div class="soap-body">
+              <div class="vital-grid">
+                <div class="vital-item">
+                  <span class="vital-name">Trạng thái nhịn ăn</span>
+                  <span class="vital-val alert" id="soapFastingStatus">Đã nhịn ăn 8h</span>
+                </div>
+                <div class="vital-item">
+                  <span class="vital-name">Mức độ khẩn</span>
+                  <span class="vital-val ok" id="soapUrgency">Routine (Tiêu chuẩn)</span>
+                </div>
+                <div class="vital-item">
+                  <span class="vital-name">Nguy cơ Red-Flag</span>
+                  <span class="vital-val safe" id="soapRedFlag">Âm tính (An toàn)</span>
+                </div>
+                <div class="vital-item">
+                  <span class="vital-name">Kênh đặt lịch</span>
+                  <span class="vital-val">App VinCare AI</span>
+                </div>
+              </div>
+              <div class="clinical-note">
+                <strong>Ghi chú khám lâm sàng (Bác sĩ điền tại viện):</strong>
+                <textarea rows="4" placeholder="Nhập thêm ghi nhận thăm khám bụng, dấu hiệu sinh tồn đo tại quầy..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- A: Assessment -->
+          <div class="soap-card assessment">
+            <div class="soap-header">
+              <span class="soap-letter">A</span>
+              <div>
+                <h3 class="soap-title">ASSESSMENT (Đánh giá Triage AI)</h3>
+                <span class="soap-sub">Định hướng hội chứng sơ bộ</span>
+              </div>
+            </div>
+            <div class="soap-body">
+              <div class="soap-section">
+                <strong>Hội chứng lâm sàng nghi vấn:</strong>
+                <div class="syndrome-pill" id="soapAssessment">Theo dõi Hội chứng khó tiêu chức năng (Functional Dyspepsia) / Viêm dạ dày tá tràng cấp</div>
+              </div>
+              <div class="soap-section">
+                <strong>Phân tầng nguy cơ:</strong>
+                <p>Nguy cơ thấp. Không có dấu hiệu xuất huyết tiêu hóa, không sụt cân, không khó nuốt, không nôn kéo dài.</p>
+              </div>
+              <div class="soap-section">
+                <strong>Mức độ ưu tiên khám:</strong>
+                <p>Khám ngoại trú theo hẹn. Đã dặn dò sẵn sàng cho nội soi nếu bác sĩ yêu cầu.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- P: Plan -->
+          <div class="soap-card plan">
+            <div class="soap-header">
+              <span class="soap-letter">P</span>
+              <div>
+                <h3 class="soap-title">PLAN (Đề xuất Xét nghiệm & Xử trí)</h3>
+                <span class="soap-sub">Kế hoạch cận lâm sàng dự kiến</span>
+              </div>
+            </div>
+            <div class="soap-body">
+              <div class="soap-section">
+                <strong>Chỉ định cận lâm sàng khuyến nghị cân nhắc:</strong>
+                <ul class="order-list" id="soapOrders">
+                  <li>Nội soi dạ dày thực quản (EGD) kiểm tra tổn thương niêm mạc & Test vi khuẩn HP (Bệnh nhân đã nhịn ăn đủ điều kiện).</li>
+                  <li>Tổng phân tích tế bào máu ngoại vi (CBC).</li>
+                  <li>Siêu âm ổ bụng tổng quát (loại trừ sỏi mật, viêm tụy).</li>
+                </ul>
+              </div>
+              <div class="soap-section">
+                <strong>Chỉ dẫn bác sĩ ký duyệt:</strong>
+                <p class="signature-line">Bác sĩ khám: ............................................  [Duyệt EMR]</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Thông tin & An toàn Y tế -->
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Về VinCare Copilot & Tiêu chuẩn An toàn Y tế</h3>
+        <button class="close-btn" onclick="closeModal('infoModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>1. Phương pháp luận & Mục đích</h4>
+        <p>VinCare Copilot là giải pháp giải quyết điểm đau trong khoảnh khắc <strong>"Đặt lịch khám & Chuẩn bị trước khi đến viện"</strong> tại Hệ thống Y tế ĐKQT Vinmec. Ứng dụng tích hợp mô hình phân luồng lâm sàng (Clinical Triage) và thẻ dặn dò tiền khám động (Dynamic Pre-visit Guidance) nhằm giảm tải nhận thức cho người bệnh và tiết kiệm thời gian nhập liệu cho bác sĩ.</p>
+        
+        <h4>2. Hàng rào An toàn Y tế (Safety Guardrails)</h4>
+        <ul>
+          <li><strong>Không chẩn đoán xác định:</strong> AI chỉ thực hiện phân luồng chuyên khoa và định hướng chuẩn bị.</li>
+          <li><strong>Red-Flag Detection:</strong> Bộ lọc quy tắc xác định phát hiện tức thì các dấu hiệu đe dọa tính mạng (đột quỵ, nhồi máu cơ tim, sốt co giật) để chuyển tuyến cấp cứu 115 ngay lập tức.</li>
+          <li><strong>Bảo mật dữ liệu:</strong> Tuân thủ Nghị định 13/2023/NĐ-CP và khử định danh dữ liệu người dùng.</li>
+        </ul>
+
+        <h4>3. Nhóm Nghiên cứu & Phát triển</h4>
+        <p>Dự án thuộc chương trình Exploration Sprint Vinmec - VinUni. Thực hiện theo chuẩn Stanford Biodesign.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Xác nhận Đặt Lịch Thành Công & Phân Rã Lâm Sàng -->
+  <div class="modal" id="bookingSuccessModal">
+    <div class="modal-content booking-modal-content">
+      <div class="booking-success-header">
+        <div class="success-icon-badge">🎉</div>
+        <h3 class="success-modal-title">XÁC NHẬN ĐẶT LỊCH KHÁM THÀNH CÔNG</h3>
+        <p class="success-modal-sub">Hệ thống VinCare Copilot đã tự động gửi thông tin phân rã lâm sàng đến Bác sĩ tiếp nhận</p>
+      </div>
+      <div class="success-body">
+        <!-- Booking Ticket Summary -->
+        <div class="booking-ticket">
+          <div class="ticket-header">
+            <div>
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: #047857; font-weight: 700;">Mã đặt hẹn khám:</span>
+              <div class="ticket-code" id="modalTicketCode">VM-2026-8942</div>
+            </div>
+            <span class="badge badge-triage" id="modalTriageStatus">Đã xác nhận • Ưu tiên Fast-Track</span>
+          </div>
+          <div class="ticket-grid">
+            <div class="ticket-item">
+              <strong>Bệnh nhân</strong>
+              <span id="modalPatientName">Anh Thế (27 tuổi)</span>
+            </div>
+            <div class="ticket-item">
+              <strong>Bác sĩ phụ trách</strong>
+              <span id="modalDoctorName" style="color: var(--vm-navy); font-weight: 700;">BS CKII. Trần Quang Minh</span>
+            </div>
+            <div class="ticket-item">
+              <strong>Chuyên khoa & Cơ sở</strong>
+              <span id="modalFacilityText">Nội Tiêu hóa • Vinmec Times City</span>
+            </div>
+            <div class="ticket-item">
+              <strong>Thời gian hẹn</strong>
+              <span id="modalApptTime" style="color: #B45309; font-weight: 700;">08:30 Sáng mai</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phân rã lý do khám (Biểu hiện & Triệu chứng) -->
+        <div class="clinical-breakdown-box">
+          <div class="breakdown-box-title">🔍 Bóc tách & Phân rã Lý do khám (AI Clinical Breakdown)</div>
+          <div class="breakdown-grid" id="modalBreakdownGrid">
+            <!-- Injected by app.js -->
+          </div>
+        </div>
+
+        <!-- Dặn dò tiền khám cốt lõi -->
+        <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 18px;">
+          <strong style="font-size: 0.78rem; color: #1D4ED8; text-transform: uppercase;">⚠️ Dặn dò thể chất quan trọng:</strong>
+          <p id="modalFastingSummary" style="font-size: 0.84rem; color: #1E3A8A; margin-top: 4px; line-height: 1.4;">Cần nhịn ăn 08 tiếng từ 00:00 đêm nay để sẵn sàng nội soi hoặc xét nghiệm máu sáng mai.</p>
+        </div>
+
+        <div class="modal-action-row">
+          <button class="btn btn-primary btn-full" onclick="viewDoctorFromConfirmation()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span>Xem Bản Chuyển Giao Bác sĩ & Bệnh Án Cũ →</span>
+          </button>
+          <button class="btn btn-secondary" onclick="closeModal('bookingSuccessModal')">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Xem chi tiết Bệnh án cũ -->
+  <div class="modal" id="pastEmrModal">
+    <div class="modal-content emr-modal-content">
+      <div class="modal-header">
+        <h3>HỒ SƠ BỆNH ÁN CŨ - HỆ THỐNG EMR VINMEC</h3>
+        <button class="close-btn" onclick="closeModal('pastEmrModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="pastEmrModalBody">
+        <!-- Injected by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Cấp cứu Khẩn cấp 24/7 -->
+  <div class="modal" id="emergencyHotlineModal">
+    <div class="modal-content modal-emergency">
+      <div class="modal-header">
+        <h3 style="color:#DC2626; display:flex; align-items:center; gap:8px;">
+          <span>🚨</span> ĐƯỜNG DÂY NÓNG CẤP CỨU 24/7 VINMEC
+        </h3>
+        <button class="close-btn" onclick="closeModal('emergencyHotlineModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#FEF2F2; border:1px solid #FECACA; border-radius:12px; padding:12px; margin-bottom:12px;">
+          <p style="color:#991B1B; font-weight:700; margin-bottom:4px; font-size:0.82rem;">⚠️ Dấu hiệu cần gọi cấp cứu hoặc đến viện ngay:</p>
+          <ul style="color:#7F1D1D; font-size:0.8rem; padding-left:16px; line-height:1.45;">
+            <li>Đau thắt ngực dữ dội, khó thở cấp tính, vã mồ hôi lạnh</li>
+            <li>Đột quỵ (méo miệng, yếu liệt nửa người, nói đớ đột ngột)</li>
+            <li>Nôn ra máu tươi, phân đen, đau bụng dữ dội như dao đâm</li>
+            <li>Trẻ nhỏ sốt cao co giật, thở rên, tím tái</li>
+          </ul>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+          <a href="tel:115" class="btn btn-emergency" style="justify-content:center; padding:11px; font-size:0.92rem; border-radius:10px;">
+            📞 GỌI CẤP CỨU QUỐC GIA 115
+          </a>
+          <a href="tel:1900232389" class="btn btn-emergency-secondary" style="justify-content:center; padding:11px; font-size:0.92rem; border-radius:10px;">
+            🏥 HOTLINE CẤP CỨU VINMEC: 1900 232389
+          </a>
+        </div>
+
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:10px 12px; font-size:0.75rem; color:#475569; line-height:1.4;">
+          <strong>Khoa Cấp cứu tiếp nhận 24/7 tại các bệnh viện:</strong><br/>
+          • Vinmec Times City: 458 Minh Khai, Hai Bà Trưng, Hà Nội<br/>
+          • Vinmec Central Park: 208 Nguyễn Hữu Cảnh, Bình Thạnh, TP.HCM<br/>
+          • Vinmec Đà Nẵng: Đường 30 Tháng 4, Hải Châu, Đà Nẵng
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Liên hệ Vinmec Toàn quốc -->
+  <div class="modal" id="contactModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:8px;">
+          <span>📞</span> LIÊN HỆ HỆ THỐNG Y TẾ VINMEC
+        </h3>
+        <button class="close-btn" onclick="closeModal('contactModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:12px; padding:12px; margin-bottom:12px;">
+          <div style="font-size:0.74rem; color:#1E40AF; font-weight:700;">TỔNG ĐÀI CHĂM SÓC KHÁCH HÀNG (24/7):</div>
+          <div style="font-size:1.3rem; font-weight:800; color:#1D4ED8; margin:2px 0;">
+            <a href="tel:1900232389" style="text-decoration:none; color:inherit;">1900 232389</a>
+          </div>
+          <p style="font-size:0.78rem; color:#3B82F6;">Hỗ trợ đặt lịch, tư vấn viện phí, thủ tục BHYT và giải đáp thắc mắc dịch vụ.</p>
+        </div>
+
+        <h4 style="font-size:0.82rem; color:#1E293B; margin-bottom:6px;">Kênh Hỗ trợ Trực tuyến:</h4>
+        <ul style="font-size:0.8rem; color:#475569; line-height:1.5; list-style:none; padding:0;">
+          <li>📧 <strong>Email CSKH:</strong> info@vinmec.com</li>
+          <li>🌐 <strong>Cổng thông tin:</strong> www.vinmec.com</li>
+          <li>📱 <strong>Fanpage:</strong> Vinmec Healthcare System</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Sổ Tiêm Chủng Điện Tử -->
+  <div class="modal" id="vaccineModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:8px;">
+          <span>💉</span> SỔ TIÊM CHỦNG ĐIỆN TỬ VINMEC
+        </h3>
+        <button class="close-btn" onclick="closeModal('vaccineModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#F0FDF4; border:1px solid #BBF7D0; padding:10px 12px; border-radius:10px; margin-bottom:12px;">
+          <div>
+            <strong style="color:#166534; font-size:0.84rem;">Sổ tiêm của: Anh Thế (27 tuổi)</strong>
+            <div style="font-size:0.72rem; color:#15803D;">Mã: VAX-VM-8942 • Tình trạng: Đạt chuẩn</div>
+          </div>
+          <span style="background:#22C55E; color:#FFFFFF; font-size:0.68rem; padding:2px 7px; border-radius:6px; font-weight:700;">ĐÃ CẬP NHẬT</span>
+        </div>
+
+        <h4 style="font-size:0.82rem; color:#1E293B; margin-bottom:6px;">Lịch sử các mũi tiêm gần nhất:</h4>
+        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.78rem;">
+          <div style="padding:8px 10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px;">
+            <div style="font-weight:700; color:#0F172A;">Vắc-xin Cúm Mùa (Influenza Tetra)</div>
+            <div style="color:#64748B;">Ngày: 15/10/2025 • Vinmec Times City • Mũi định kỳ</div>
+          </div>
+          <div style="padding:8px 10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px;">
+            <div style="font-weight:700; color:#0F172A;">Vắc-xin Viêm gan B (Engerix-B)</div>
+            <div style="color:#64748B;">Kháng thể Anti-HBs: > 500 mUI/ml (Bảo vệ cao)</div>
+          </div>
+          <div style="padding:8px 10px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px;">
+            <div style="font-weight:700; color:#0F172A;">Vắc-xin Phế cầu khuẩn (Prevenar 13)</div>
+            <div style="color:#64748B;">Ngày: 12/03/2024 • Phòng viêm phổi & màng não</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px; text-align:center;">
+          <button type="button" class="btn btn-primary btn-full" style="padding:9px; font-size:0.82rem;" onclick="showToast('Đang kết nối gói tiêm chủng trọn gói gia đình Vinmec'); closeModal('vaccineModal');">
+            Đăng ký gói tiêm vắc-xin gia đình →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Đơn Thuốc Điện Tử & Hướng Dẫn Uống -->
+  <div class="modal" id="prescriptionModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:8px;">
+          <span>💊</span> ĐƠN THUỐC ĐIỆN TỬ VINMEC
+        </h3>
+        <button class="close-btn" onclick="closeModal('prescriptionModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; padding:10px 12px; border-radius:10px; margin-bottom:12px;">
+          <strong style="color:#92400E; font-size:0.82rem;">MÃ ĐƠN: RX-VM-2025-4128</strong>
+          <p style="color:#B45309; font-size:0.74rem; margin-top:2px;">Kê bởi: BS CKI. Vũ Thị Mai • Chẩn đoán: Viêm dạ dày trợt nhẹ</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:0.82rem;">
+          <div style="padding:10px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between;">
+              <strong style="color:#002D62;">1. Phosphalugel 20g (Nhôm phosphat colloidal)</strong>
+              <span style="color:#059669; font-weight:700;">Hộp 26 gói</span>
+            </div>
+            <p style="color:#475569; margin-top:4px;">Uống 1 gói khi đau hoặc sau ăn 1-2 tiếng. Không uống cùng các thuốc khác trong vòng 2 tiếng.</p>
+          </div>
+          <div style="padding:10px; background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between;">
+              <strong style="color:#002D62;">2. Silymarin 140mg (Hỗ trợ tế bào gan)</strong>
+              <span style="color:#059669; font-weight:700;">Hộp 60 viên</span>
+            </div>
+            <p style="color:#475569; margin-top:4px;">Uống 1 viên x 2 lần/ngày sau bữa ăn sáng và tối.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:8px;">
+          <button type="button" class="btn btn-outline" style="flex:1; justify-content:center;" onclick="showToast('Đã bật tính năng Nhắc giờ uống thuốc tự động trên điện thoại'); closeModal('prescriptionModal');">
+            ⏰ Cài nhắc uống thuốc
+          </button>
+          <button type="button" class="btn btn-primary" style="flex:1; justify-content:center;" onclick="closeModal('prescriptionModal'); viewPastEmrDetail();">
+            Xem bệnh án gốc EMR →
+          </button>
+        </div>
+      </div>
+    </div>
+  <!-- Modal: Chọn Cơ sở Vinmec & Quét GPS Tự động -->
+  <div class="modal" id="facilityPickerModal">
+    <div class="modal-content" style="max-height: min(650px, calc(100vh - 32px));">
+      <div class="modal-header">
+        <h3 style="display:flex; align-items:center; gap:8px;">
+          <span>🏥</span> CHỌN BỆNH VIỆN VINMEC
+        </h3>
+        <button class="close-btn" onclick="closeModal('facilityPickerModal')">&times;</button>
+      </div>
+      <div class="modal-body facility-picker-body">
+        <!-- GPS Hero Action Box -->
+        <div class="gps-hero-box">
+          <div class="gps-hero-top">
+            <div class="gps-badge-radar">
+              <span class="gps-pulse-ring"></span>
+              <strong style="color:#065F46; font-size:0.78rem;">ĐỊNH VỊ GPS VỊ TRÍ GẦN NHẤT</strong>
+            </div>
+            <span class="gps-status-text" id="gpsStatusText">Sẵn sàng</span>
+          </div>
+          <p style="font-size:0.74rem; color:#064E3B; margin:6px 0 10px; line-height:1.4;">
+            Đo khoảng cách thực tế từ vị trí của bạn đến toàn bộ 11 bệnh viện & phòng khám Vinmec trên toàn quốc.
+          </p>
+          <button type="button" class="btn-gps-hero-action" id="btnModalGpsScan" onclick="autoDetectGpsFacility(true)">
+            <span>🛰️</span>
+            <span id="btnModalGpsText">Quét GPS & Chọn Bệnh viện gần nhất</span>
+          </button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="facility-search-wrap">
+          <input type="text" id="facilitySearchInput" class="facility-search-input" placeholder="🔍 Tìm kiếm bệnh viện, quận, đường..." oninput="filterFacilityList()">
+        </div>
+
+        <!-- Region Pills Filter -->
+        <div class="facility-region-pills">
+          <button type="button" class="region-pill active" onclick="filterByRegion('all', this)">Tất cả (11)</button>
+          <button type="button" class="region-pill" onclick="filterByRegion('hanoi', this)">Hà Nội (4)</button>
+          <button type="button" class="region-pill" onclick="filterByRegion('hcm', this)">TP.HCM (2)</button>
+          <button type="button" class="region-pill" onclick="filterByRegion('central', this)">Đà Nẵng & MT (2)</button>
+          <button type="button" class="region-pill" onclick="filterByRegion('other', this)">Khác (3)</button>
+        </div>
+
+        <!-- Facility Cards List (Sorted by distance km) -->
+        <div class="facility-cards-list" id="facilityCardsList">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastNotification">Đã sao chép vào bộ nhớ tạm!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
